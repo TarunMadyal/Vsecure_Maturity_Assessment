@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Core colours */
+  --bg-primary: #080e1c;
+  --bg-card: #0d1627;
+  --bg-card-hover: #0f1e35;
+  --accent: #1d9e75;
+  --accent-light: #e1f5ee;
+  --border: #1a2540;
+  --border-accent: #1d9e75;
+  --text-primary: #f0f6ff;
+  --text-secondary: #94a3b8;
+  --text-muted: #475569;
+
+  /* Level colours (0–5) */
+  --level-0: #888780;
+  --level-1: #e24b4a;
+  --level-2: #ef9f27;
+  --level-3: #378add;
+  --level-4: #1d9e75;
+  --level-5: #0f6e56;
+
+  /* Risk colours */
+  --risk-critical: #e24b4a;
+  --risk-high: #ef9f27;
+  --risk-medium: #378add;
+  --risk-low: #1d9e75;
+}
+
+html {
+  background: var(--bg-primary);
+}
+
+body {
+  @apply bg-navy text-ink antialiased;
+  font-family: Inter, 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* PDF / print mode: keep dark branding on paper */
+@media print {
+  html,
+  body {
+    background: var(--bg-primary) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

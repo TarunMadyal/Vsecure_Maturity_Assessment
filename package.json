@@ -1,0 +1,19 @@
+{
+  "name": "vsecure-iam-assessment",
+  "version": "1.0.0",
+  "description": "vSecure IAM Maturity Assessment Platform — assess.vsecure.ai",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "seed": "node server/db/seed.js",
+    "dev": "concurrently -n server,client -c green,cyan \"npm run dev -w server\" \"npm run dev -w client\"",
+    "build": "npm run build -w client",
+    "start": "node server/index.js"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

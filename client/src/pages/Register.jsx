@@ -116,7 +116,7 @@ export default function Register() {
           <button
             type="submit"
             disabled={busy}
-            className="w-full rounded-xl bg-accent text-white font-semibold py-3.5 hover:opacity-90 transition-opacity disabled:opacity-50"
+            className="w-full rounded-xl btn-gradient text-white font-semibold py-3.5 hover:opacity-90 transition-opacity disabled:opacity-50"
           >
             {busy ? 'Creating your assessment…' : 'Start the assessment'}
           </button>

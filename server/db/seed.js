@@ -1,9 +1,9 @@
 /**
- * vSecure IAM Maturity Assessment — database seed script.
+ * vSecure IAM Maturity Assessment - database seed script.
  *
  * Applies schema.sql, then loads the control areas and questions from
  * questionBank.js. Assessment content lives ONLY in the question bank (and
- * the DB) — never in React components — so updated workbooks from the
+ * the DB) - never in React components - so updated workbooks from the
  * security team are swapped in by editing questionBank.js and re-running
  * `npm run seed`.
  *

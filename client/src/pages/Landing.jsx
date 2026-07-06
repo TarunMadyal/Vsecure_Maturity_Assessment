@@ -25,11 +25,11 @@ export default function Landing() {
           </p>
           <h1 className="text-4xl md:text-5xl font-bold text-ink leading-tight">
             Discover your IAM maturity in{' '}
-            <span className="text-accent">30 minutes</span>
+            <span className="text-gradient">30 minutes</span>
           </h1>
           <p className="mt-6 text-lg text-ink-2 leading-relaxed">
             Evaluate your organisation's identity and access management practices
-            across {meta ? meta.types.length - 1 : 'four'} specialist areas — IGA,
+            across {meta ? meta.types.length - 1 : 'four'} specialist areas - IGA,
             PAM, WAM and CIAM. Rate your maturity per control area, capture your
             current environment, and receive a board-ready report with a
             prioritised 12-month improvement roadmap.
@@ -37,7 +37,7 @@ export default function Landing() {
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/register?type=overall"
-              className="rounded-xl bg-accent text-white font-semibold px-8 py-4 hover:opacity-90 transition-opacity"
+              className="rounded-xl btn-gradient text-white font-semibold px-8 py-4 hover:opacity-90 transition-opacity"
             >
               Start Full IAM Assessment
             </Link>
@@ -84,7 +84,7 @@ export default function Landing() {
         {/* How it works */}
         <section className="pb-24 grid md:grid-cols-3 gap-4">
           {[
-            ['Answer honestly', 'Rate each maturity question 1–5 against your current reality — or N/A if it doesn\'t apply — and describe your environment in the information questions.'],
+            ['Answer honestly', 'Rate each maturity question 1–5 against your current reality - or N/A if it doesn\'t apply - and describe your environment in the information questions.'],
             ['See your scores', 'Scores per control area with maturity ratings, risk tiers, framework coverage and observations explained in business terms.'],
             ['Act on the roadmap', 'A prioritised 12-month improvement roadmap with detailed remediation actions, plus a board-ready PDF report.'],
           ].map(([title, body], i) => (
@@ -100,7 +100,7 @@ export default function Landing() {
       </main>
 
       <footer className="border-t border-edge py-8 text-center text-sm text-ink-3">
-        vSecure — AI-native identity security · assess.vsecure.ai
+        vSecure - AI-native identity security · assess.vsecure.ai
       </footer>
     </div>
   );

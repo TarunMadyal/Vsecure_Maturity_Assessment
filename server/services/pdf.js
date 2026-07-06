@@ -1,5 +1,5 @@
 /**
- * PDF generation — Puppeteer renders the results page (in print mode, ?pdf=1)
+ * PDF generation - Puppeteer renders the results page (in print mode, ?pdf=1)
  * and returns the PDF buffer. The Express server itself serves the built
  * client, so we render against our own local port rather than the public URL.
  */

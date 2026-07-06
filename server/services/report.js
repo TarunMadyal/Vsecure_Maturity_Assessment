@@ -1,5 +1,5 @@
 /**
- * Report builder — assembles the full assessment report payload, mirroring
+ * Report builder - assembles the full assessment report payload, mirroring
  * the vSecure reference report structure:
  *   title/score → executive summary → scope & current state → maturity
  *   footprint (current vs proposed vs maximum) → risk distribution →

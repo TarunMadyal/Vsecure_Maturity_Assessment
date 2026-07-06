@@ -11,7 +11,7 @@ export default function Header({ cta = true }) {
         {cta && (
           <a
             href="mailto:vijay@vsecure.ai?subject=vSecure%20demo%20request"
-            className="text-sm font-semibold text-accent border border-edge-accent rounded-lg px-4 py-2 hover:bg-card-hover transition-colors"
+            className="btn-gradient text-sm font-semibold text-white rounded-full px-5 py-2.5 hover:opacity-90 transition-opacity"
           >
             Book a demo
           </a>

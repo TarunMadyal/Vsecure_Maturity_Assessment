@@ -2,11 +2,11 @@ import { RISK_COLORS } from '../lib/theme';
 
 /**
  * Detailed findings: control area | key observation | risk | numbered
- * remediation steps | duration — mirroring the reference report table.
+ * remediation steps | duration - mirroring the reference report table.
  */
 export default function ObservationsTable({ observations }) {
   if (!observations.length) {
-    return <p className="text-sm text-ink-2">No material observations — all control areas scored 4.0 or above.</p>;
+    return <p className="text-sm text-ink-2">No material observations - all control areas scored 4.0 or above.</p>;
   }
   return (
     <div className="space-y-4">

@@ -24,7 +24,7 @@ function requireAdmin(req, res, next) {
 
 router.use(requireAdmin);
 
-// GET /api/admin/sessions — all assessments, newest first.
+// GET /api/admin/sessions - all assessments, newest first.
 router.get('/sessions', async (req, res, next) => {
   try {
     const [rows] = await pool.query(
@@ -47,7 +47,7 @@ router.get('/sessions', async (req, res, next) => {
   }
 });
 
-// GET /api/admin/sessions/:token — full report payload for one assessment.
+// GET /api/admin/sessions/:token - full report payload for one assessment.
 router.get('/sessions/:token', async (req, res, next) => {
   try {
     const session = await findSessionByToken(req.params.token);
@@ -70,7 +70,7 @@ router.get('/sessions/:token', async (req, res, next) => {
   }
 });
 
-// GET /api/admin/stats — aggregate intelligence: average domain scores
+// GET /api/admin/stats - aggregate intelligence: average domain scores
 // across all completed assessments.
 router.get('/stats', async (req, res, next) => {
   try {
@@ -107,7 +107,7 @@ router.get('/stats', async (req, res, next) => {
   }
 });
 
-// GET /api/admin/export — CSV of all assessments.
+// GET /api/admin/export - CSV of all assessments.
 router.get('/export', async (req, res, next) => {
   try {
     const [rows] = await pool.query(

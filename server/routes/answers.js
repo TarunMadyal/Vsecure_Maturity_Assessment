@@ -4,7 +4,7 @@ const { findSessionByToken } = require('./sessions');
 
 const router = express.Router();
 
-// POST /api/answers — auto-save a single answer the moment it is given.
+// POST /api/answers - auto-save a single answer the moment it is given.
 // Maturity questions send { token, question_id, level: 0–5 }.
 // Information questions send { token, question_id, text: "…" }.
 // Upserts, so changing an answer overwrites the previous one.

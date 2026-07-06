@@ -58,7 +58,7 @@ export default function Admin() {
   }
 
   const fmtDate = (d) =>
-    d ? new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+    d ? new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '-';
 
   if (!authed) {
     return (
@@ -83,7 +83,7 @@ export default function Admin() {
               autoFocus
             />
             {error && <p className="text-sm text-[color:var(--risk-critical)]">{error}</p>}
-            <button className="w-full rounded-xl bg-accent text-white font-semibold py-3">
+            <button className="w-full rounded-xl btn-gradient text-white font-semibold py-3">
               Sign in
             </button>
           </form>
@@ -118,7 +118,7 @@ export default function Admin() {
         {stats && stats.domains.length > 0 && (
           <section className="rounded-2xl border border-edge bg-card p-6">
             <h2 className="text-lg font-semibold text-ink mb-1">Average score by domain</h2>
-            <p className="text-sm text-ink-2 mb-5">Across all completed assessments — weakest first.</p>
+            <p className="text-sm text-ink-2 mb-5">Across all completed assessments - weakest first.</p>
             <div className="space-y-4">
               {stats.domains.map((d) => (
                 <div key={d.slug}>
@@ -239,7 +239,7 @@ export default function Admin() {
                   <ul className="space-y-1.5 text-sm text-ink-2">
                     {detail.critical_gaps.map((g, i) => (
                       <li key={g.slug}>
-                        {i + 1}. {g.name} — {g.score.toFixed(1)}/5 ·{' '}
+                        {i + 1}. {g.name} - {g.score.toFixed(1)}/5 ·{' '}
                         <span style={{ color: RISK_COLORS[g.risk] }}>{g.risk} risk</span>
                       </li>
                     ))}

@@ -22,7 +22,7 @@ app.use('/api/answers', answersRouter);
 app.use('/api/results', resultsRouter);
 app.use('/api/admin', adminRouter);
 
-// GET /api/meta — assessment type catalogue for the landing/select pages.
+// GET /api/meta - assessment type catalogue for the landing/select pages.
 // Control-area lists and question counts come straight from the DB so the
 // client never hardcodes content.
 app.get('/api/meta', async (req, res, next) => {
@@ -82,7 +82,7 @@ app.get('/api/meta', async (req, res, next) => {
   }
 });
 
-// GET /results/:token/pdf — Puppeteer renders the results page and returns it.
+// GET /results/:token/pdf - Puppeteer renders the results page and returns it.
 app.get(['/results/:token/pdf', '/api/results/:token/pdf'], async (req, res, next) => {
   try {
     const session = await findSessionByToken(req.params.token);

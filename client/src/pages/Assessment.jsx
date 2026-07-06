@@ -106,7 +106,7 @@ export default function Assessment() {
     setSaveError(null);
     api.saveAnswer(token, q.id, { level }).catch(() => {
       setAnswers((a) => ({ ...a, [q.id]: prev }));
-      setSaveError('Could not save that answer — check your connection and try again.');
+      setSaveError('Could not save that answer - check your connection and try again.');
     });
     if (index < questions.length - 1) {
       clearTimeout(advanceTimer.current);
@@ -128,7 +128,7 @@ export default function Assessment() {
       api
         .saveAnswer(token, qid, { text })
         .then(() => setInfoSaved(true))
-        .catch(() => setSaveError('Could not save your response — check your connection and try again.'));
+        .catch(() => setSaveError('Could not save your response - check your connection and try again.'));
     }, 700);
   }
 
@@ -248,7 +248,7 @@ export default function Assessment() {
               <div className="mt-5">
                 <p className="text-sm text-ink-2 mb-3">
                   Describe your current environment. This is captured as-is for the
-                  report's current-state understanding — it does not affect your score,
+                  report's current-state understanding - it does not affect your score,
                   and you can skip it if it doesn't apply.
                 </p>
                 <textarea
@@ -287,7 +287,7 @@ export default function Assessment() {
                 type="button"
                 onClick={submit}
                 disabled={submitting}
-                className="rounded-lg bg-accent text-white font-semibold px-6 py-2.5 hover:opacity-90 transition-opacity disabled:opacity-50"
+                className="rounded-lg btn-gradient text-white font-semibold px-6 py-2.5 hover:opacity-90 transition-opacity disabled:opacity-50"
               >
                 {submitting ? 'Scoring…' : 'See my results'}
               </button>
@@ -306,14 +306,14 @@ export default function Assessment() {
           {allMaturityAnswered && index !== questions.length - 1 && (
             <div className="mt-6 rounded-xl border border-edge-accent bg-card p-4 flex items-center justify-between gap-4">
               <p className="text-sm text-ink-2">
-                All maturity questions are rated — you can submit now or keep adding
+                All maturity questions are rated - you can submit now or keep adding
                 information detail.
               </p>
               <button
                 type="button"
                 onClick={submit}
                 disabled={submitting}
-                className="flex-none rounded-lg bg-accent text-white font-semibold px-5 py-2.5 hover:opacity-90 transition-opacity disabled:opacity-50"
+                className="flex-none rounded-lg btn-gradient text-white font-semibold px-5 py-2.5 hover:opacity-90 transition-opacity disabled:opacity-50"
               >
                 {submitting ? 'Scoring…' : 'See my results'}
               </button>
@@ -335,7 +335,7 @@ export default function Assessment() {
             <h3 className="text-ink font-semibold text-lg">Continue later</h3>
             <p className="text-sm text-ink-2 mt-2">
               Every answer is saved automatically. Use your personal link to pick up
-              exactly where you left off — it was also emailed to you when you
+              exactly where you left off - it was also emailed to you when you
               registered.
             </p>
             <div className="mt-4 flex gap-2">

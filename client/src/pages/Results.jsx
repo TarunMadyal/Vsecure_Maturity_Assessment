@@ -140,7 +140,7 @@ export default function Results() {
             <div className="flex flex-wrap gap-3 mt-8 no-print">
               <a
                 href="mailto:vijay@vsecure.ai?subject=vSecure%20demo%20request"
-                className="rounded-xl bg-accent text-white font-semibold px-6 py-3 hover:opacity-90 transition-opacity"
+                className="rounded-xl btn-gradient text-white font-semibold px-6 py-3 hover:opacity-90 transition-opacity"
               >
                 Book a demo
               </a>
@@ -217,8 +217,8 @@ export default function Results() {
               {[
                 ['Organisation', report.session.company_name],
                 ['Assessment type', report.session.assessment_type_name],
-                ['Industry', report.session.industry || '—'],
-                ['Region', report.session.region || '—'],
+                ['Industry', report.session.industry || '-'],
+                ['Region', report.session.region || '-'],
                 ['Sections assessed', report.engagement.sections_assessed],
                 ['Questions answered', report.engagement.questions_answered],
                 ['Text responses', report.engagement.text_responses],
@@ -247,7 +247,7 @@ export default function Results() {
               <div className="mt-4 rounded-xl bg-card-hover border border-edge px-5 py-3 flex items-center justify-between">
                 <span className="text-sm text-ink-2">Overall Maturity Index:</span>
                 <span className="text-lg font-bold text-ink">
-                  {report.overall_score.toFixed(2)} — {report.maturity_label}
+                  {report.overall_score.toFixed(2)} - {report.maturity_label}
                 </span>
               </div>
             </div>
@@ -409,13 +409,13 @@ export default function Results() {
           <h2 className="text-xl font-bold text-ink">Ready to close these gaps?</h2>
           <p className="text-ink-2 mt-2 max-w-xl mx-auto">
             vSecure's AI-native identity security platform maps directly to the gaps in
-            this report. Talk to us about a tailored remediation plan — this roadmap
+            this report. Talk to us about a tailored remediation plan - this roadmap
             targets a {report.target_score.toFixed(1)} '{report.maturity_label === 'Optimised' ? 'Optimised' : 'Managed'}' posture.
           </p>
           {!pdfMode ? (
             <a
               href="mailto:vijay@vsecure.ai?subject=vSecure%20demo%20request"
-              className="inline-block mt-6 rounded-xl bg-accent text-white font-semibold px-8 py-3.5 hover:opacity-90 transition-opacity no-print"
+              className="inline-block mt-6 rounded-xl btn-gradient text-white font-semibold px-8 py-3.5 hover:opacity-90 transition-opacity no-print"
             >
               Book a demo
             </a>

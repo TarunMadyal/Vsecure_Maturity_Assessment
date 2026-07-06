@@ -1,5 +1,5 @@
 /**
- * Scoring engine — runs server-side only, never in the browser.
+ * Scoring engine - runs server-side only, never in the browser.
  *
  * Only MATURITY questions are scored:
  *   control_area_score = SUM(level × question_weight) / SUM(5 × question_weight) × 5

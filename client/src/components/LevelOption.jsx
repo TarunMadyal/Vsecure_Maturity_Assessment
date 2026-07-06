@@ -24,7 +24,7 @@ export default function LevelOption({ level, label, selected, onSelect }) {
       </span>
       <span className="min-w-0">
         <span className="block text-sm font-semibold" style={{ color: selected ? 'var(--text-primary)' : color }}>
-          Level {level} — {LEVEL_NAMES[level]}
+          Level {level} - {LEVEL_NAMES[level]}
         </span>
         <span className="block text-sm text-ink-2">{label}</span>
       </span>

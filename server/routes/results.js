@@ -4,7 +4,7 @@ const { buildResultsPayload } = require('../services/report');
 
 const router = express.Router();
 
-// GET /api/results/:token — full report payload for the results page and PDF.
+// GET /api/results/:token - full report payload for the results page and PDF.
 router.get('/:token', async (req, res, next) => {
   try {
     const session = await findSessionByToken(req.params.token);

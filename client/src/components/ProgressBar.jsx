@@ -10,7 +10,7 @@ export default function ProgressBar({ answered, total }) {
       </div>
       <div className="h-2 rounded-full bg-card-hover overflow-hidden border border-edge">
         <div
-          className="h-full rounded-full bg-accent transition-all duration-300"
+          className="h-full rounded-full btn-gradient transition-all duration-300"
           style={{ width: `${pct}%` }}
         />
       </div>

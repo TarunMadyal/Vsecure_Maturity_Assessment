@@ -76,7 +76,7 @@ function groupByControlArea(questionRows) {
   return areas;
 }
 
-// POST /api/sessions — lead capture: create a session, email the team + user.
+// POST /api/sessions - lead capture: create a session, email the team + user.
 router.post('/', async (req, res, next) => {
   try {
     const {
@@ -114,7 +114,7 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-// GET /api/sessions/:token — session, its control areas/questions, saved answers.
+// GET /api/sessions/:token - session, its control areas/questions, saved answers.
 router.get('/:token', async (req, res, next) => {
   try {
     const session = await findSessionByToken(req.params.token);
@@ -147,7 +147,7 @@ router.get('/:token', async (req, res, next) => {
   }
 });
 
-// POST /api/sessions/:token/submit — run the scoring engine and store results.
+// POST /api/sessions/:token/submit - run the scoring engine and store results.
 // All MATURITY questions must be answered; information questions are optional
 // discovery detail.
 router.post('/:token/submit', async (req, res, next) => {

@@ -37,7 +37,7 @@ export default function SelectType() {
             >
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-ink">
-                  {t.type === 'overall' ? t.name : `${t.type} — ${t.name}`}
+                  {t.type === 'overall' ? t.name : `${t.type} - ${t.name}`}
                 </h2>
                 {t.type === 'overall' && (
                   <span className="text-xs font-semibold text-accent border border-edge-accent rounded-full px-3 py-1">

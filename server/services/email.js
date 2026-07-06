@@ -1,5 +1,5 @@
 /**
- * Email service — Nodemailer.
+ * Email service - Nodemailer.
  *
  * If SMTP credentials are not configured (dev environments), emails are
  * logged to the console instead of sent, so the rest of the flow still works.
@@ -40,7 +40,7 @@ const wrap = (body) => `
     <div style="max-width:560px;margin:0 auto;background:#0d1627;border:1px solid #1a2540;border-radius:12px;padding:32px">
       <h2 style="color:#1D9E75;margin-top:0">vSecure</h2>
       ${body}
-      <p style="color:#475569;font-size:12px;margin-bottom:0">vSecure — AI-native identity security · assess.vsecure.ai</p>
+      <p style="color:#475569;font-size:12px;margin-bottom:0">vSecure - AI-native identity security · assess.vsecure.ai</p>
     </div>
   </div>`;
 
@@ -54,14 +54,14 @@ async function sendRegistrationEmails(session) {
 
   await send({
     to: ADMIN_EMAIL,
-    subject: `New assessment started: ${session.company_name} — ${session.contact_email} — ${session.assessment_type}`,
+    subject: `New assessment started: ${session.company_name} - ${session.contact_email} - ${session.assessment_type}`,
     html: wrap(`
       <p><strong>${session.contact_name}</strong> (${session.contact_role || 'role not given'})
       at <strong>${session.company_name}</strong> has started a
       <strong>${session.assessment_type}</strong> assessment.</p>
       <p>Email: ${session.contact_email}<br/>
-      Company size: ${session.company_size || '—'}<br/>
-      Industry: ${session.industry || '—'}</p>
+      Company size: ${session.company_size || '-'}<br/>
+      Industry: ${session.industry || '-'}</p>
       ${button(`${BASE_URL}/admin`, 'Open admin dashboard')}
     `),
   });
@@ -72,7 +72,7 @@ async function sendRegistrationEmails(session) {
     html: wrap(`
       <p>Hi ${session.contact_name},</p>
       <p>Thanks for starting the vSecure IAM Maturity Assessment for
-      <strong>${session.company_name}</strong>. Your progress is saved automatically —
+      <strong>${session.company_name}</strong>. Your progress is saved automatically -
       you can return any time using your personal link below.</p>
       ${button(link, 'Continue my assessment')}
       <p style="color:#94a3b8;font-size:13px">Or copy this link: ${link}</p>
@@ -88,7 +88,7 @@ async function sendCompletionEmails(session, results) {
 
   await send({
     to: ADMIN_EMAIL,
-    subject: `Assessment completed: ${session.company_name} — Score: ${results.overallScore.toFixed(1)}/5 — Critical gaps: ${gaps}`,
+    subject: `Assessment completed: ${session.company_name} - Score: ${results.overallScore.toFixed(1)}/5 - Critical gaps: ${gaps}`,
     html: wrap(`
       <p><strong>${session.company_name}</strong> (${session.contact_email}) completed a
       <strong>${session.assessment_type}</strong> assessment.</p>

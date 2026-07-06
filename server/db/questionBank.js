@@ -1,12 +1,12 @@
 /**
- * vSecure IAM Maturity Assessment — question bank.
+ * vSecure IAM Maturity Assessment - question bank.
  *
  * Source of truth for all assessment content, structured per the vSecure
  * methodology:  area (IGA/PAM/WAM/CIAM) → control area → sub-category →
  * question. Question types:
- *   'M' (maturity)    — scored 1–5 against the maturity framework; may carry
+ *   'M' (maturity)    - scored 1–5 against the maturity framework; may carry
  *                       bespoke level descriptors, otherwise DEFAULT_LEVELS.
- *   'I' (information) — free-text; unscored; presented in the report as
+ *   'I' (information) - free-text; unscored; presented in the report as
  *                       current-environment understanding.
  *
  * PAM content: transcribed from the PAM assessment workbook.
@@ -22,11 +22,11 @@
 
 // Maturity level names: 1 Initial · 2 Repeatable · 3 Defined · 4 Managed · 5 Optimised
 const DEFAULT_LEVELS = [
-  'Initial — no defined process or capability in place',
-  'Repeatable — basic capability exists but is manual and inconsistent',
-  'Defined — documented and standardised across the organisation',
-  'Managed — enforced and automated with periodic review and metrics',
-  'Optimised — continuously reviewed and improved with analytics and automation',
+  'Initial - no defined process or capability in place',
+  'Repeatable - basic capability exists but is manual and inconsistent',
+  'Defined - documented and standardised across the organisation',
+  'Managed - enforced and automated with periodic review and metrics',
+  'Optimised - continuously reviewed and improved with analytics and automation',
 ];
 
 // Compact helpers
@@ -42,7 +42,7 @@ const AREAS = {
         name: 'PAM Strategy & Landscape',
         slug: 'pam-strategy-landscape',
         icon: 'key',
-        capability: 'vSecure PAM module — strategy & architecture',
+        capability: 'vSecure PAM module - strategy & architecture',
         description: 'Strategy, architecture, policies and audit readiness of the privileged access estate.',
         questions: [
           M('PAM Strategy', 'Does the organization have a defined Privileged Access Management (PAM) strategy, and is it aligned with business objectives?', { nist: 'PM-9' }),
@@ -51,7 +51,7 @@ const AREAS = {
           M('Architecture', 'Is current PAM design documented and up-to-date?', { nist: 'PL-2' }),
           I('Architecture', 'What is the version of each of the PAM solution components deployed?'),
           I('Architecture', 'Provide a view on any gaps and challenges with current PAM implementation.'),
-          I('Architecture', 'Where is PAM deployed — on-prem / cloud / SaaS?'),
+          I('Architecture', 'Where is PAM deployed - on-prem / cloud / SaaS?'),
           I('Architecture', 'Which modules or use cases are implemented with the current PAM solution? Sample use cases: automatic/manual check-in/check-out of credentials; automatic logon to managed systems; session recording; password retrieval with dual-control approval; remote access; secrets management.'),
           M('Architecture', 'Is PAM integrated with any ITSM solution? If yes, provide use case details (e.g. real-time ticket validation).', { nist: 'CM-3' }),
           I('Architecture', 'How many AD domains is the PAM solution integrated with? Provide domain names.'),
@@ -59,7 +59,7 @@ const AREAS = {
           I('Architecture', 'Is PAM integrated with a SIEM solution? If yes, provide tool name and use case details.'),
           I('Architecture', 'Please provide details of any planned expansion / enhancements / upgrades.'),
           M('Architecture', 'Are privileged systems and PAM tools built against a hardened configuration baseline?', { nist: 'CM-6', cis: '4.1' }),
-          I('Architecture', 'Please clarify access methods for each platform integrated with the PAM solution — the different ways users log in with privileged accounts and operate on systems (e.g. RDP, SSH).'),
+          I('Architecture', 'Please clarify access methods for each platform integrated with the PAM solution - the different ways users log in with privileged accounts and operate on systems (e.g. RDP, SSH).'),
           M('Availability of privileged access policies and processes', 'Is the privileged access policy defined and documented?', { nist: 'AC-1' }),
           M('Availability of privileged access policies and processes', 'Is the privileged access policy practiced/enforced?', { nist: 'AC-2(7)' }),
           M('Availability of privileged access policies and processes', 'Is the privileged access policy reviewed periodically? How frequently is the policy reviewed?', { nist: 'AC-1' }),
@@ -80,7 +80,7 @@ const AREAS = {
         name: 'Privileged Identity Management',
         slug: 'privileged-identity-management',
         icon: 'users',
-        capability: 'vSecure PAM module — privileged identity lifecycle',
+        capability: 'vSecure PAM module - privileged identity lifecycle',
         description: 'Discovery, inventory, provisioning and control of privileged accounts.',
         questions: [
           M('Privileged Accounts Inventory', 'Are privileged accounts automatically discovered periodically?', { cis: '5.1' }),
@@ -98,7 +98,7 @@ const AREAS = {
         name: 'Privileged Password Management',
         slug: 'privileged-password-management',
         icon: 'lock',
-        capability: 'vSecure PAM module — credential vaulting & rotation',
+        capability: 'vSecure PAM module - credential vaulting & rotation',
         description: 'Password policy, vaulting, rotation and protection of privileged credentials and SSH keys.',
         questions: [
           M('Enforcement of strong password policy', 'Is there a password policy defined and documented for all account types?', { nist: 'IA-5', cis: '5.2' }),
@@ -115,7 +115,7 @@ const AREAS = {
         name: 'Privileged Authentication and Authorisation',
         slug: 'privileged-authn-authz',
         icon: 'shield',
-        capability: 'vSecure PAM module — MFA & least privilege',
+        capability: 'vSecure PAM module - MFA & least privilege',
         description: 'MFA for privileged access and enforcement of least privilege and just-in-time elevation.',
         questions: [
           M('Enforcement of Multi-factor Authentication (MFA)', 'How is multifactor authentication implemented and enforced for all the highly sensitive privileged accounts?', { nist: 'IA-2(1)', cis: '6.5' }),
@@ -131,7 +131,7 @@ const AREAS = {
         name: 'Privileged Access Governance',
         slug: 'privileged-access-governance',
         icon: 'clipboard-check',
-        capability: 'vSecure PAM module — access certification & SoD',
+        capability: 'vSecure PAM module - access certification & SoD',
         description: 'Certification of privileged access, segregation of duties and third-party privileged access.',
         questions: [
           M('Review of existing privileged access', 'Is there a process defined and documented to certify privileged accounts and accesses?', { nist: 'AC-2(j)' }),
@@ -149,7 +149,7 @@ const AREAS = {
         name: 'Privileged Access Monitoring and Reporting',
         slug: 'privileged-access-monitoring',
         icon: 'activity',
-        capability: 'vSecure PAM module — session monitoring & analytics',
+        capability: 'vSecure PAM module - session monitoring & analytics',
         description: 'Session recording, anomaly detection, response, recovery and compliance reporting for privileged activity.',
         questions: [
           I('Recording and Monitoring of sessions for highly sensitive privileged activities', 'Does an audit and retention policy exist for privileged accounts?'),
@@ -180,7 +180,7 @@ const AREAS = {
         name: 'Non-Human Accounts',
         slug: 'non-human-accounts',
         icon: 'cloud',
-        capability: 'vSecure PAM module — secrets & machine identity',
+        capability: 'vSecure PAM module - secrets & machine identity',
         description: 'Governance of service accounts, application IDs, API keys and other machine identities with privileged access.',
         questions: [
           I('Processes, Operating procedures and Standards', 'Please provide a process document describing how service accounts are created, how frequently the passwords are re-cycled, and processes around how service accounts are requested for human access (if any such instances).'),
@@ -204,7 +204,7 @@ const AREAS = {
         name: 'Architecture, Tools and Design',
         slug: 'wam-architecture-tools-design',
         icon: 'globe',
-        capability: 'vSecure WAM module — access architecture',
+        capability: 'vSecure WAM module - access architecture',
         description: 'Central WAM/SSO architecture, product strategy, resilience and recovery.',
         questions: [
           M('Central WAM platform', 'Is a central SSO and MFA solution implemented to enforce strong authentication and seamless access for workforce identities?', {
@@ -252,7 +252,7 @@ const AREAS = {
         name: 'Identity Lifecycle Management',
         slug: 'wam-identity-lifecycle',
         icon: 'users',
-        capability: 'vSecure IGA module — lifecycle automation',
+        capability: 'vSecure IGA module - lifecycle automation',
         description: 'Identity inventory, metadata quality and joiner-mover-leaver automation for web access.',
         questions: [
           M('Identity inventory', 'Is an up-to-date inventory available for all identity types along with their critical metadata (joining date, last date, manager, department, etc.)?', {
@@ -281,7 +281,7 @@ const AREAS = {
         name: 'Access Governance',
         slug: 'wam-access-governance',
         icon: 'clipboard-check',
-        capability: 'vSecure IGA module — certification & SoD',
+        capability: 'vSecure IGA module - certification & SoD',
         description: 'Grant/revoke processes, access certification, segregation of duties and least privilege for web identities.',
         questions: [
           M('Grant & revoke', 'Is a process documented for granting and revoking standard and privileged accesses?', {
@@ -365,7 +365,7 @@ const AREAS = {
         name: 'Password Management',
         slug: 'wam-password-management',
         icon: 'key',
-        capability: 'vSecure WAM module — credential hygiene',
+        capability: 'vSecure WAM module - credential hygiene',
         description: 'Password policy enforcement, secure credential distribution and self-service for workforce identities.',
         questions: [
           M('Policy', 'Is there a password policy defined, documented and strictly enforced for all account types?', { nist: 'IA-5', cis: '5.2' }),
@@ -375,7 +375,7 @@ const AREAS = {
               'Informal sharing practices; some teams use secure notes',
               'Documented standard for secure sharing; adoption partial',
               'Corporate credential vault enforced for all administrative sharing',
-              'No shared secrets — ephemeral credentials and passwordless flows',
+              'No shared secrets - ephemeral credentials and passwordless flows',
             ], nist: 'IA-5(6)',
           }),
           M('Self-service', 'Is self-service password reset available and adopted across the workforce?', { nist: 'IA-5', cis: '6.2' }),
@@ -386,12 +386,12 @@ const AREAS = {
         name: 'Single Sign-On',
         slug: 'wam-single-sign-on',
         icon: 'user-check',
-        capability: 'vSecure WAM module — SSO fabric',
+        capability: 'vSecure WAM module - SSO fabric',
         description: 'SSO coverage across modern and legacy applications and protocol standardisation.',
         questions: [
           M('Coverage', 'What proportion of applications are integrated with the central SSO solution?', {
             levels: [
-              'No SSO — every application has separate credentials',
+              'No SSO - every application has separate credentials',
               'SSO for a small set of applications; most remain standalone',
               'SSO standard defined; the majority of modern applications integrated',
               'Near-complete SSO coverage including legacy applications via gateways/proxies',
@@ -427,7 +427,7 @@ const AREAS = {
         name: 'Regulatory Requirements',
         slug: 'wam-regulatory-requirements',
         icon: 'briefcase',
-        capability: 'vSecure Governance Advisory — compliance evidence',
+        capability: 'vSecure Governance Advisory - compliance evidence',
         description: 'Mapping of WAM controls to regulatory frameworks and audit evidence readiness.',
         questions: [
           M('Framework mapping', 'Are WAM controls mapped to applicable regulatory frameworks (NIST, UK GDPR, FCA, ISO 27001)?', { nist: 'PM-9' }),
@@ -446,7 +446,7 @@ const AREAS = {
         name: 'Architecture and Landscape',
         slug: 'iga-architecture-landscape',
         icon: 'globe',
-        capability: 'vSecure IGA module — platform & integration',
+        capability: 'vSecure IGA module - platform & integration',
         description: 'IGA platform, integrations with authoritative sources and organisational landscape.',
         questions: [
           M('Platform', 'Is an IGA platform implemented and integrated with authoritative sources (HR) for identity data?', { nist: 'IA-4' }),
@@ -461,7 +461,7 @@ const AREAS = {
         name: 'Identity and Access Administration',
         slug: 'iga-identity-access-admin',
         icon: 'users',
-        capability: 'vSecure IGA module — provisioning & administration',
+        capability: 'vSecure IGA module - provisioning & administration',
         description: 'User types, sources of truth, provisioning automation and administration tooling.',
         questions: [
           M('Provisioning automation', 'Is provisioning and deprovisioning to downstream systems automated from the IGA platform?', {
@@ -476,7 +476,7 @@ const AREAS = {
           M('Roles', 'a) Are there roles configured? b) Have you designed the roles manually? How are they reviewed?', { nist: 'AC-2(7)' }),
           M('Birthright', 'a) Is any birthright access provisioning or role configured? b) How do you handle birthright role provisioning for the contractors?', { nist: 'AC-2' }),
           M('Self-service', 'Is there any self-service password reset functionality in place?', { nist: 'IA-5' }),
-          I('User landscape', 'Type and number of each user type — e.g. employees, contractors, partners, etc.'),
+          I('User landscape', 'Type and number of each user type - e.g. employees, contractors, partners, etc.'),
           I('User landscape', 'How do these user types differentiate? Please add examples as well.'),
           I('User landscape', 'Provide a view on the numbers of each category of users.'),
           I('User landscape', 'Provide the source of truth for each identity type.'),
@@ -493,7 +493,7 @@ const AREAS = {
         name: 'Identity Lifecycle Management',
         slug: 'iga-identity-lifecycle',
         icon: 'user-check',
-        capability: 'vSecure IGA module — JML automation',
+        capability: 'vSecure IGA module - JML automation',
         description: 'Joiner, mover, leaver, emergency termination and re-hire processes.',
         questions: [
           M('Lifecycle automation', 'Are joiner, mover and leaver events processed automatically and on time from HR triggers across systems?', {
@@ -517,7 +517,7 @@ const AREAS = {
         name: 'Password Management',
         slug: 'iga-password-management',
         icon: 'lock',
-        capability: 'vSecure IGA module — credential policy',
+        capability: 'vSecure IGA module - credential policy',
         description: 'Password and lockout policy definition and enforcement across account types.',
         questions: [
           M('Policy', 'Is there a password policy defined and documented for all account types? Please provide supporting document (if any).', { nist: 'IA-5', cis: '5.2' }),
@@ -529,7 +529,7 @@ const AREAS = {
         name: 'Access Governance',
         slug: 'iga-access-governance',
         icon: 'clipboard-check',
-        capability: 'vSecure IGA module — certification & SoD',
+        capability: 'vSecure IGA module - certification & SoD',
         description: 'Recertification campaigns, request/approval workflows and segregation of duties.',
         questions: [
           M('Certification', 'Are there any recertification campaigns run?', {
@@ -544,7 +544,7 @@ const AREAS = {
           M('Access requests', 'Are access requests raised for roles (role-based requesting with approvals)?', { nist: 'AC-2' }),
           M('SoD review', 'Is there a process defined to review the SoD policies periodically? If yes, what is the frequency?', { nist: 'AC-5' }),
           I('Campaigns', 'a) What is the frequency of campaigns? b) How is the frequency defined? c) Is it based on any application-specific compliance standard?'),
-          I('Campaigns', 'a) What is the identity coverage for access review campaigns? b) Who are the target audience? c) How is data collected? d) What type of campaigns are being run — app-wise, user-wise, role-wise, etc.? e) What is the process to remediate accesses post certification?'),
+          I('Campaigns', 'a) What is the identity coverage for access review campaigns? b) Who are the target audience? c) How is data collected? d) What type of campaigns are being run - app-wise, user-wise, role-wise, etc.? e) What is the process to remediate accesses post certification?'),
           I('Workflows', 'Provide details about the type of request and approval workflows configured.'),
           I('Workflows', 'Are there more than one access request interfaces?'),
           I('Provisioning', 'What is the process of provisioning access? Is there any automated provisioning?'),
@@ -576,7 +576,7 @@ const AREAS = {
         name: 'CIAM Strategy & Architecture',
         slug: 'ciam-strategy-architecture',
         icon: 'globe',
-        capability: 'vSecure CIAM module — platform & architecture',
+        capability: 'vSecure CIAM module - platform & architecture',
         description: 'Customer identity strategy, platform architecture and resilience.',
         questions: [
           M('Strategy', 'Does the organisation have a defined customer identity (CIAM) strategy aligned with business and digital objectives?'),
@@ -590,7 +590,7 @@ const AREAS = {
         name: 'Registration & Onboarding',
         slug: 'ciam-registration-onboarding',
         icon: 'user-check',
-        capability: 'vSecure CIAM module — onboarding journeys',
+        capability: 'vSecure CIAM module - onboarding journeys',
         description: 'Customer self-registration, identity verification and progressive profiling.',
         questions: [
           M('Registration', 'Is customer self-registration secure, with appropriate identity verification for the risk of the service?', { nist: 'IA-12' }),
@@ -602,7 +602,7 @@ const AREAS = {
         name: 'Customer Authentication & MFA',
         slug: 'ciam-authentication-mfa',
         icon: 'lock',
-        capability: 'vSecure CIAM module — adaptive customer authentication',
+        capability: 'vSecure CIAM module - adaptive customer authentication',
         description: 'Authentication options, MFA coverage and risk-based challenges for customers.',
         questions: [
           M('MFA', 'Are MFA options available and encouraged/enforced for customer accounts?', { nist: 'IA-2(1)' }),
@@ -615,7 +615,7 @@ const AREAS = {
         name: 'Consent & Privacy Management',
         slug: 'ciam-consent-privacy',
         icon: 'clipboard-check',
-        capability: 'vSecure CIAM module — consent & preference management',
+        capability: 'vSecure CIAM module - consent & preference management',
         description: 'Capture, versioning and enforcement of customer consent, and self-service privacy controls.',
         questions: [
           M('Consent', 'Is customer consent captured, versioned and enforced across systems in line with UK GDPR?', { nist: 'PT-2' }),
@@ -627,7 +627,7 @@ const AREAS = {
         name: 'Account Protection & Fraud',
         slug: 'ciam-account-protection',
         icon: 'shield',
-        capability: 'vSecure CIAM module — fraud & takeover protection',
+        capability: 'vSecure CIAM module - fraud & takeover protection',
         description: 'Defences against credential stuffing, account takeover detection and secure recovery.',
         questions: [
           M('Attack protection', 'Are bot detection, rate limiting and breached-password checks in place for customer login?', { cis: '4.1' }),
@@ -640,7 +640,7 @@ const AREAS = {
         name: 'Scalability & Resilience',
         slug: 'ciam-scalability-resilience',
         icon: 'activity',
-        capability: 'vSecure CIAM module — scale & reliability',
+        capability: 'vSecure CIAM module - scale & reliability',
         description: 'Ability of the customer identity platform to absorb traffic spikes and meet availability targets.',
         questions: [
           M('Scale', 'Can the customer login system handle sudden traffic spikes without downtime (auto-scaling, load tested)?', { nist: 'SC-5' }),

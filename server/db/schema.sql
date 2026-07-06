@@ -1,11 +1,11 @@
--- vSecure IAM Maturity Assessment Platform — database schema
+-- vSecure IAM Maturity Assessment Platform - database schema
 -- MySQL 8+ / MariaDB 10.6+
 --
 -- Model (per vSecure assessment methodology):
 --   assessment area (IGA / PAM / WAM / CIAM, or "overall" = all areas)
---     └─ control area  (rows in `domains`, e.g. "PAM Strategy & Landscape")
---         └─ sub-category (label on each question, e.g. "Architecture")
---             └─ question — type "maturity" (scored 1–5) or
+--     -> control area  (rows in `domains`, e.g. "PAM Strategy & Landscape")
+--         -> sub-category (label on each question, e.g. "Architecture")
+--             -> question - type "maturity" (scored 1-5) or
 --                           "information" (free text, unscored, reported as
 --                           current-environment understanding)
 

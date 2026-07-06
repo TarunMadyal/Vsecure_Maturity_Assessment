@@ -10,7 +10,7 @@ import {
 } from 'recharts';
 
 /**
- * Maturity footprint radar — Current vs Proposed vs Maximum by control area,
+ * Maturity footprint radar - Current vs Proposed vs Maximum by control area,
  * mirroring the reference report. SVG-only so it renders under Puppeteer.
  */
 export default function RadarChart({ footprint, height = 400 }) {

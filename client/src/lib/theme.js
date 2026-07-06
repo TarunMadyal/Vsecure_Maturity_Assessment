@@ -1,4 +1,4 @@
-// Presentation constants only — no assessment content lives here.
+// Presentation constants only - no assessment content lives here.
 
 export const LEVEL_COLORS = {
   0: '#888780',

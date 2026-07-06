@@ -3,15 +3,19 @@
 @tailwind utilities;
 
 :root {
-  /* Core colours */
-  --bg-primary: #080e1c;
-  --bg-card: #0d1627;
-  --bg-card-hover: #0f1e35;
-  --accent: #1d9e75;
-  --accent-light: #e1f5ee;
-  --border: #1a2540;
-  --border-accent: #1d9e75;
-  --text-primary: #f0f6ff;
+  /* Core colours - vSecure brand: near-black background, blue-to-violet
+     gradient accent, teal used sparingly for small highlights. */
+  --bg-primary: #05070f;
+  --bg-card: #0a0e1c;
+  --bg-card-hover: #101529;
+  --accent: #3b6bff;
+  --accent-to: #7c3aed;
+  --accent-gradient: linear-gradient(90deg, var(--accent), var(--accent-to));
+  --accent-teal: #2dd4bf;
+  --accent-light: #e5ecff;
+  --border: #1b2140;
+  --border-accent: #3b6bff;
+  --text-primary: #f5f7ff;
   --text-secondary: #94a3b8;
   --text-muted: #475569;
 
@@ -37,6 +41,19 @@ html {
 body {
   @apply bg-navy text-ink antialiased;
   font-family: Inter, 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* Primary brand gradient - used for the main call-to-action buttons and
+   headline highlights, matching vsecure.ai. */
+.btn-gradient {
+  background-image: var(--accent-gradient);
+}
+
+.text-gradient {
+  background-image: var(--accent-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 /* PDF / print mode: keep dark branding on paper */

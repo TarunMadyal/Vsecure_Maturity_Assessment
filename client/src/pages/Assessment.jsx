@@ -152,6 +152,25 @@ export default function Assessment() {
     <div className="min-h-screen bg-navy pb-16">
       <Header cta={false} />
 
+      {/* Scoring overlay: blocks interaction and duplicate submits while the
+          engine runs, then the app navigates to the report. */}
+      {submitting && (
+        <div
+          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center px-4"
+          role="status"
+          aria-live="assertive"
+        >
+          <div className="rounded-2xl border border-edge bg-card px-8 py-7 text-center animate-pop-in">
+            <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="var(--accent)"
+              strokeWidth="2.5" strokeLinecap="round" className="animate-spin mx-auto" aria-hidden="true">
+              <path d="M12 2a10 10 0 0 1 10 10" />
+            </svg>
+            <p className="text-ink font-semibold mt-4">Scoring your assessment…</p>
+            <p className="text-sm text-ink-2 mt-1">Building your maturity report and roadmap.</p>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-6xl mx-auto px-4 pt-6">
         <div className="flex items-center justify-between gap-4 mb-1.5">
           <span className="text-sm text-ink-3">
@@ -170,7 +189,7 @@ export default function Assessment() {
         <ProgressBar answered={maturityAnswered} total={maturityQuestions.length} />
       </div>
 
-      <main className="max-w-6xl mx-auto px-4 py-8 flex gap-6 items-start">
+      <main id="main" className="max-w-6xl mx-auto px-4 py-8 flex gap-6 items-start">
         <ControlAreaNav
           areas={data.control_areas}
           answers={answers}

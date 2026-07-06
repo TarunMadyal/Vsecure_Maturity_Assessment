@@ -36,6 +36,7 @@ export default function ControlAreaNav({ areas, answers, currentAreaId, onSelect
                   <button
                     type="button"
                     onClick={() => onSelect(area.id)}
+                    aria-current={active ? 'true' : undefined}
                     className={`w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-left border transition-colors
                       ${active
                         ? 'border-edge-accent bg-card-hover text-ink'
@@ -74,6 +75,7 @@ export default function ControlAreaNav({ areas, answers, currentAreaId, onSelect
                 key={area.id}
                 type="button"
                 onClick={() => onSelect(area.id)}
+                aria-current={active ? 'true' : undefined}
                 className={`flex-none flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs transition-colors
                   ${active ? 'border-edge-accent bg-card-hover text-ink' : 'border-edge text-ink-2'}`}
               >

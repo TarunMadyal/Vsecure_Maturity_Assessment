@@ -64,7 +64,7 @@ export default function Admin() {
     return (
       <div className="min-h-screen bg-navy">
         <Header cta={false} />
-        <main className="max-w-sm mx-auto px-4 py-24">
+        <main id="main" className="max-w-sm mx-auto px-4 py-24">
           <h1 className="text-2xl font-bold text-ink text-center mb-6">Admin dashboard</h1>
           <form
             className="rounded-2xl border border-edge bg-card p-6 space-y-4"
@@ -95,7 +95,7 @@ export default function Admin() {
   return (
     <div className="min-h-screen bg-navy pb-20">
       <Header cta={false} />
-      <main className="max-w-6xl mx-auto px-4 py-10 space-y-8">
+      <main id="main" className="max-w-6xl mx-auto px-4 py-10 space-y-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-ink">Assessments</h1>

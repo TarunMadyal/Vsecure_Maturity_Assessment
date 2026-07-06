@@ -39,10 +39,35 @@ export default function Results() {
 
   const [report, setReport] = useState(null);
   const [error, setError] = useState(null);
+  const [pdfState, setPdfState] = useState('idle'); // idle | loading | error
 
   useEffect(() => {
     api.results(token).then(setReport).catch((e) => setError(e.message));
   }, [token]);
+
+  // Fetch the PDF through /api (so the Vite dev proxy reaches Express) and
+  // trigger a download, with a visible loading state while Puppeteer renders.
+  async function downloadPdf() {
+    if (pdfState === 'loading') return;
+    setPdfState('loading');
+    try {
+      const res = await fetch(`/api/results/${token}/pdf`);
+      if (!res.ok) throw new Error(`PDF request failed (${res.status})`);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const company = (report?.session.company_name || 'report').replace(/[^\w-]+/g, '-');
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `vsecure-iam-assessment-${company}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      setPdfState('idle');
+    } catch (err) {
+      setPdfState('error');
+    }
+  }
 
   if (error) {
     return (
@@ -150,13 +175,26 @@ export default function Results() {
               >
                 Book a demo
               </a>
-              <a
-                href={`/results/${token}/pdf`}
-                className="rounded-xl border border-edge-accent text-accent font-semibold px-6 py-3 hover:bg-card-hover transition-colors"
+              <button
+                type="button"
+                onClick={downloadPdf}
+                disabled={pdfState === 'loading'}
+                className="rounded-xl border border-edge-accent text-accent font-semibold px-6 py-3 hover:bg-card-hover transition-colors disabled:opacity-60 inline-flex items-center gap-2"
               >
-                Download PDF report
-              </a>
+                {pdfState === 'loading' && (
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                    strokeWidth="3" strokeLinecap="round" className="animate-spin" aria-hidden="true">
+                    <path d="M12 2a10 10 0 0 1 10 10" />
+                  </svg>
+                )}
+                {pdfState === 'loading' ? 'Preparing PDF…' : 'Download PDF report'}
+              </button>
             </div>
+          )}
+          {pdfState === 'error' && !pdfMode && (
+            <p role="alert" className="mt-3 text-sm text-[color:var(--risk-critical)] no-print">
+              Could not generate the PDF. Please try again in a moment.
+            </p>
           )}
         </section>
 

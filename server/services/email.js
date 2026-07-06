@@ -59,9 +59,16 @@ async function sendRegistrationEmails(session) {
       <p><strong>${session.contact_name}</strong> (${session.contact_role || 'role not given'})
       at <strong>${session.company_name}</strong> has started a
       <strong>${session.assessment_type}</strong> assessment.</p>
-      <p>Email: ${session.contact_email}<br/>
-      Company size: ${session.company_size || '-'}<br/>
-      Industry: ${session.industry || '-'}</p>
+      <p>
+        Name: ${session.contact_name}<br/>
+        Email: ${session.contact_email}<br/>
+        Role: ${session.contact_role || '-'}<br/>
+        Company: ${session.company_name}<br/>
+        Company size: ${session.company_size || '-'}<br/>
+        Industry: ${session.industry || '-'}<br/>
+        Region: ${session.region || '-'}<br/>
+        Assessment: ${session.assessment_type}
+      </p>
       ${button(`${BASE_URL}/admin`, 'Open admin dashboard')}
     `),
   });

@@ -23,49 +23,60 @@ app.use('/api/results', resultsRouter);
 app.use('/api/admin', adminRouter);
 
 // GET /api/meta — assessment type catalogue for the landing/select pages.
-// Question counts and domain lists come straight from the DB so the client
-// never hardcodes content.
+// Control-area lists and question counts come straight from the DB so the
+// client never hardcodes content.
 app.get('/api/meta', async (req, res, next) => {
   try {
     const [rows] = await pool.query(
       `SELECT d.domain_type, d.name, d.slug, d.icon, d.description,
-              COUNT(q.id) AS question_count
+              SUM(q.question_type = 'maturity') AS maturity_count,
+              SUM(q.question_type = 'information') AS info_count
        FROM domains d LEFT JOIN questions q ON q.domain_id = d.id
        GROUP BY d.id ORDER BY d.sort_order`
     );
-    const totalQuestions = rows.reduce((n, r) => n + Number(r.question_count), 0);
     const typed = (type) => rows.filter((r) => r.domain_type === type);
-    const sumQ = (list) => list.reduce((n, r) => n + Number(r.question_count), 0);
+    const counts = (list) => ({
+      maturity: list.reduce((n, r) => n + Number(r.maturity_count || 0), 0),
+      info: list.reduce((n, r) => n + Number(r.info_count || 0), 0),
+    });
+    // ~0.5 min per maturity rating, ~1.5 min per information response.
+    const minutes = (c) => Math.max(10, Math.round(c.maturity * 0.5 + c.info * 1.5));
 
     const TYPE_INFO = {
-      IGA: { name: 'Identity Governance', tagline: 'Joiner/mover/leaver, access reviews and entitlements' },
-      PAM: { name: 'Privileged Access', tagline: 'Admin accounts, vaulting, session recording and JIT access' },
-      WAM: { name: 'Web Access Management', tagline: 'Workforce SSO, MFA, sessions and access policies' },
-      CIAM: { name: 'Customer Identity', tagline: 'Customer login, account protection, consent and recovery' },
+      IGA: { name: 'Identity Governance & Administration', tagline: 'Lifecycle automation, provisioning, certification and reporting' },
+      PAM: { name: 'Privileged Access Management', tagline: 'Vaulting, least privilege, session monitoring and machine identities' },
+      WAM: { name: 'Web Access Management', tagline: 'SSO coverage, MFA, sessions, governance and compliance evidence' },
+      CIAM: { name: 'Customer Identity', tagline: 'Customer login, consent, fraud protection and resilience' },
     };
 
+    const allCounts = counts(rows);
     const types = [
       {
         type: 'overall',
         name: 'Full IAM Assessment',
-        tagline: 'Every domain, complete maturity picture with benchmarks',
-        question_count: totalQuestions,
-        minutes: Math.max(25, Math.round(totalQuestions * 0.35)),
+        tagline: 'Every control area across IGA, PAM, WAM and CIAM',
+        question_count: allCounts.maturity + allCounts.info,
+        maturity_count: allCounts.maturity,
+        info_count: allCounts.info,
+        minutes: minutes(allCounts),
         domains: rows.map((r) => ({ name: r.name, slug: r.slug, icon: r.icon })),
       },
       ...Object.entries(TYPE_INFO).map(([type, info]) => {
         const list = typed(type);
+        const c = counts(list);
         return {
           type,
           name: info.name,
           tagline: info.tagline,
-          question_count: sumQ(list),
-          minutes: Math.max(10, Math.round(sumQ(list) * 0.6)),
+          question_count: c.maturity + c.info,
+          maturity_count: c.maturity,
+          info_count: c.info,
+          minutes: minutes(c),
           domains: list.map((r) => ({ name: r.name, slug: r.slug, icon: r.icon })),
         };
       }),
     ];
-    res.json({ types, total_questions: totalQuestions });
+    res.json({ types });
   } catch (err) {
     next(err);
   }

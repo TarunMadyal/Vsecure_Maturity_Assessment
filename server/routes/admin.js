@@ -1,7 +1,7 @@
 const express = require('express');
 const pool = require('../db/pool');
 const { findSessionByToken } = require('./sessions');
-const { buildResultsPayload } = require('./results');
+const { buildResultsPayload } = require('../services/report');
 const { riskLevel } = require('../services/scoring');
 
 const router = express.Router();
@@ -56,12 +56,13 @@ router.get('/sessions/:token', async (req, res, next) => {
       return res.status(409).json({ error: 'Assessment not yet completed' });
     }
     res.json({
-      ...buildResultsPayload(session),
+      ...(await buildResultsPayload(session)),
       contact: {
         email: session.contact_email,
         role: session.contact_role,
         company_size: session.company_size,
         industry: session.industry,
+        region: session.region,
       },
     });
   } catch (err) {
@@ -82,7 +83,8 @@ router.get('/stats', async (req, res, next) => {
        JOIN questions q ON a.question_id = q.id
        JOIN domains d ON q.domain_id = d.id
        JOIN assessment_sessions s ON a.session_id = s.id
-       WHERE s.completed_at IS NOT NULL AND a.level_selected > 0
+       WHERE s.completed_at IS NOT NULL AND q.question_type = 'maturity'
+         AND a.level_selected IS NOT NULL AND a.level_selected > 0
        GROUP BY d.id, d.name, d.slug
        ORDER BY avg_score ASC`
     );

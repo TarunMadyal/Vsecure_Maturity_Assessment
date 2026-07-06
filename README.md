@@ -1,21 +1,47 @@
 # vSecure IAM Maturity Assessment Platform
 
 A web platform where enterprise teams (CISOs, IT managers) evaluate their
-organisation's identity & access management maturity across IAM domains,
-see weighted scores against industry benchmarks, and get a personalised
-90-day remediation roadmap mapped to vSecure capabilities.
+organisation's identity & access management maturity, capture their current
+environment, and receive a board-ready report with a prioritised 12-month
+improvement roadmap. Hosted at **assess.vsecure.ai**.
 
-Hosted at **assess.vsecure.ai**. This is a *maturity assessment*, not a quiz —
-every question is answered on a Level 1–5 scale (plus Level 0 = N/A):
+## Assessment model
 
-| Level | Name | Meaning |
-|---|---|---|
-| 0 | N/A | Not applicable to our organisation *(excluded from scoring)* |
-| 1 | Initial | Ad hoc, chaotic, no defined process |
-| 2 | Managed | Repeatable but manual |
-| 3 | Defined | Standardised process exists |
-| 4 | Quantified | Automated and measurable |
-| 5 | Optimising | AI-driven, continuously improving |
+```
+assessment area (IGA / PAM / WAM / CIAM — or "overall" = all areas)
+  └─ control area            e.g. "PAM Strategy & Landscape"   (scored /5)
+      └─ sub-category        e.g. "Architecture"
+          └─ question
+              ├─ maturity     — rated Level 1–5 (or 0 = N/A, excluded)
+              └─ information  — free text, unscored, reported as
+                                current-environment understanding
+```
+
+Maturity framework levels: **1 Initial · 2 Repeatable · 3 Defined ·
+4 Managed · 5 Optimised**. Risk tiers per the report legend: Critical (≤1),
+High (≤2), Medium (≤3), Low (>3).
+
+Question sets (in `server/db/questionBank.js`):
+- **PAM** — full workbook: 7 control areas, 84 questions
+- **WAM** — framework matrix + report sections: 8 control areas, 35 questions
+  (with the framework's own per-level descriptors where provided)
+- **IGA** — questionnaire: 6 control areas, 45 questions
+- **CIAM** — structured placeholders pending the CIAM workbook: 6 areas, 22 questions
+
+## Report structure (results page + PDF)
+
+Mirrors the vSecure reference report: title page with overall score and
+control-area breakdown → executive summary (goals, key positives, industry
+benchmark statement, key observations, business impact, quick wins /
+strategic improvements / business benefits) → scope & current state
+(engagement context: sections assessed, questions answered, text responses)
+→ maturity footprint radar (current vs proposed vs maximum) with reasons per
+rating → question-level risk distribution and areas by risk tier →
+observations & remediations with durations → framework coverage
+(covered 4–5 / partial 2–3 / not covered 1, per framework) → 6-phase
+improvement roadmap (P1 risk-prioritised + P2 strategic) → detailed
+remediation actions → current environment understanding (information
+responses).
 
 ## Stack
 
@@ -28,40 +54,30 @@ every question is answered on a Level 1–5 scale (plus Level 0 = N/A):
 ## Quick start
 
 ```bash
-# 1. Install everything (npm workspaces)
-npm install
-
-# 2. Configure
-cp .env.example .env       # fill in DB credentials, SMTP, ADMIN_PASSWORD
-
-# 3. Create the database, then apply schema + seed placeholder questions
+npm install                # workspaces: root, client, server
+cp .env.example .env       # DB credentials, SMTP, ADMIN_PASSWORD
 mysql -e "CREATE DATABASE vsecure_iam"
 npm run seed               # drops & recreates all tables — dev only
-
-# 4. Develop (Express on :3001, Vite on :5173 with /api proxy)
-npm run dev
-
-# 5. Production
-npm run build              # builds client/dist
-npm start                  # Express serves the API + built client on :3001
+npm run dev                # Express :3001 + Vite :5173 (/api proxied)
 ```
 
-If SMTP credentials are left empty, emails are logged to the console instead
-of sent, so the whole flow works locally without a mail account.
+Production: `npm run build` then `npm start` — Express serves the API and
+the built client on one port. If SMTP credentials are left empty, emails are
+logged to the console instead of sent.
 
 ## Project layout
 
 ```
-client/                  React frontend (no question text hardcoded anywhere)
-  src/components/        LevelOption, DomainNav, ProgressBar, RadarChart,
-                         DomainScoreBar, CriticalGapCard, RoadmapTimeline, …
-  src/pages/             Landing, SelectType, Register, Assessment, Results, Admin
-server/
-  routes/                sessions.js, answers.js, results.js, admin.js
-  services/              scoring.js (scoring engine), email.js, pdf.js,
-                         recommendations.js (gap text, benchmarks, roadmap)
-  db/                    schema.sql, seed.js, pool.js
-  index.js               Express app; also serves client/dist + SPA fallback
+client/src/components/   LevelOption, ControlAreaNav, ProgressBar, RadarChart,
+                         DomainScoreBar, RiskDonut, CoverageBars,
+                         ObservationsTable, RoadmapTimeline, …
+client/src/pages/        Landing, SelectType, Register, Assessment, Results, Admin
+server/routes/           sessions.js, answers.js, results.js, admin.js
+server/services/         scoring.js (engine), report.js (report payload),
+                         recommendations.js (per-area narrative content),
+                         email.js, pdf.js
+server/db/               schema.sql, questionBank.js (ALL assessment content),
+                         seed.js, pool.js
 ```
 
 ## Key routes
@@ -70,9 +86,9 @@ server/
 |---|---|
 | `GET /` | Landing page |
 | `GET /start` | Assessment type selection (full / IGA / PAM / WAM / CIAM) |
-| `GET /register?type=…` | Lead capture form — creates the session |
-| `GET /assessment/:token` | The assessment (auto-saves every answer) |
-| `GET /results/:token` | Scored report (`?pdf=1` = print layout) |
+| `GET /register?type=…` | Lead capture (name, email, company, role, size, industry, region) |
+| `GET /assessment/:token` | Assessment: control-area sidebar, maturity + information questions, auto-save |
+| `GET /results/:token` | Full report (`?pdf=1` = print layout) |
 | `GET /results/:token/pdf` | Puppeteer-generated PDF download |
 | `GET /admin` | Password-protected dashboard + CSV export |
 
@@ -80,15 +96,12 @@ server/
 
 ```
 POST /api/sessions                 create session (register form)
-GET  /api/sessions/:token          session + questions + saved answers
-POST /api/answers                  save one answer immediately (upsert)
-POST /api/sessions/:token/submit   run scoring, store results, send emails
-GET  /api/results/:token           full scored report payload
+GET  /api/sessions/:token          session + control areas/questions + answers
+POST /api/answers                  auto-save one answer: {level} or {text}
+POST /api/sessions/:token/submit   score (all maturity questions required)
+GET  /api/results/:token           full report payload
 GET  /api/meta                     assessment-type catalogue (from DB)
-GET  /api/admin/sessions           all sessions            (Basic auth)
-GET  /api/admin/sessions/:token    one full report         (Basic auth)
-GET  /api/admin/stats              aggregate domain scores (Basic auth)
-GET  /api/admin/export             CSV export              (Basic auth)
+GET  /api/admin/…                  sessions / detail / stats / export (Basic auth)
 ```
 
 Admin endpoints use HTTP Basic auth: username `admin`, password =
@@ -96,35 +109,21 @@ Admin endpoints use HTTP Basic auth: username `admin`, password =
 
 ## Scoring
 
-Runs **server-side only** (`server/services/scoring.js`), on submit:
+Server-side only (`server/services/scoring.js`), on submit:
 
-- `domain_score = SUM(level × question_weight) / SUM(5 × question_weight) × 5`
-- Overall score = domain scores weighted by `domain_weight`
-- Critical gaps = bottom 3 domains by score
-- **Level 0 (N/A) answers are excluded** so organisations aren't penalised for
-  questions that don't apply; a domain answered entirely N/A is omitted.
-- Risk bands: `<1.5` Critical · `<2.5` High · `<3.5` Medium · else Low
+- Control-area score = `SUM(level × weight) / SUM(5 × weight) × 5` over
+  **maturity** answers; Level 0 (N/A) and information answers excluded.
+- Overall = weighted average of control-area scores (weights default 1 →
+  simple average, matching the reference report).
+- Submission requires every maturity question answered; information
+  questions are optional discovery detail.
+- Results stored on the session row; answers lock after submit.
 
-Results are stored on the session row (`overall_score`, `domain_scores`,
-`critical_gaps`) at submit time.
+## Updating assessment content
 
-## Swapping in the real questions
-
-Placeholder content lives in `server/db/seed.js` (one entry per domain with
-its questions, weights, NIST/CIS references and level labels). Replace the
-text there and re-run `npm run seed`, or edit the `questions` table directly —
-the client renders whatever the database returns, including question counts
-and estimated durations.
-
-The score-derived report copy (business-risk explanations, industry
-benchmarks, roadmap actions per domain) lives in
-`server/services/recommendations.js`, keyed by domain slug.
-
-## Environment variables
-
-See `.env.example`. Notable ones:
-
-- `ADMIN_PASSWORD` — required for `/admin` and `/api/admin/*`
-- `BASE_URL` — public URL used in emails (https://assess.vsecure.ai)
-- `PUPPETEER_EXECUTABLE_PATH` — optional path to a system Chromium for PDF
-  generation (leave empty to use Puppeteer's bundled Chrome)
+All questions live in `server/db/questionBank.js` — control areas,
+sub-categories, question types, framework references and per-level
+descriptors. Edit and re-run `npm run seed`. Per-area report narrative
+(observations, remediation steps, reasons, roadmap actions, benchmarks)
+lives in `server/services/recommendations.js`, keyed by control-area slug
+with a generic fallback for new areas.

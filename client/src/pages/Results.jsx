@@ -4,10 +4,32 @@ import Header from '../components/Header';
 import Logo from '../components/Logo';
 import RadarChart from '../components/RadarChart';
 import DomainScoreBar from '../components/DomainScoreBar';
-import CriticalGapCard from '../components/CriticalGapCard';
+import RiskDonut from '../components/RiskDonut';
+import CoverageBars from '../components/CoverageBars';
+import ObservationsTable from '../components/ObservationsTable';
 import RoadmapTimeline from '../components/RoadmapTimeline';
-import { RISK_COLORS } from '../lib/theme';
+import { RISK_COLORS, scoreColor } from '../lib/theme';
 import { api } from '../lib/api';
+
+const Section = ({ title, subtitle, children }) => (
+  <section className="rounded-2xl border border-edge bg-card p-6">
+    <h2 className="text-lg font-semibold text-ink">{title}</h2>
+    {subtitle && <p className="text-sm text-ink-2 mt-0.5 mb-5">{subtitle}</p>}
+    {!subtitle && <div className="mb-5" />}
+    {children}
+  </section>
+);
+
+const Bullets = ({ items, marker = '▸', markerClass = 'text-accent' }) => (
+  <ul className="space-y-1.5">
+    {items.map((it, i) => (
+      <li key={i} className="flex gap-2 text-sm text-ink-2 leading-relaxed">
+        <span className={`${markerClass} flex-none mt-0.5`}>{marker}</span>
+        <span>{it}</span>
+      </li>
+    ))}
+  </ul>
+);
 
 export default function Results() {
   const { token } = useParams();
@@ -42,43 +64,75 @@ export default function Results() {
   }
 
   const riskColor = RISK_COLORS[report.risk];
+  const es = report.executive_summary;
   const completed = report.session.completed_at
     ? new Date(report.session.completed_at).toLocaleDateString('en-GB', {
         day: 'numeric', month: 'long', year: 'numeric',
       })
     : '';
+  const contextLine = [report.session.industry, report.session.region]
+    .filter(Boolean)
+    .map((v, i) => `${i === 0 ? 'Industry' : 'Region'}: ${v}`)
+    .join('  |  ');
 
   return (
     <div className="min-h-screen bg-navy" data-report-ready="true">
       {!pdfMode && <Header cta={false} />}
 
-      <main className="max-w-4xl mx-auto px-4 py-10 space-y-10">
-        {/* Branded report header */}
+      <main className="max-w-5xl mx-auto px-4 py-10 space-y-8">
+        {/* ---- Title ---- */}
         <section className="rounded-2xl border border-edge bg-card p-8">
-          <div className="flex flex-wrap items-start justify-between gap-6">
-            <div>
-              <Logo size={40} />
-              <h1 className="text-2xl font-bold text-ink mt-4">
-                IAM Maturity Assessment Report
+          <div className="flex flex-wrap items-start justify-between gap-8">
+            <div className="flex-1 min-w-[260px]">
+              <Logo size={38} />
+              <h1 className="text-2xl md:text-3xl font-bold text-ink mt-5 leading-tight uppercase">
+                {report.session.assessment_type === 'overall'
+                  ? 'IAM Maturity'
+                  : `${report.session.assessment_type} Maturity`}{' '}
+                <span className="text-accent">Assessment Report</span>
               </h1>
-              <p className="text-ink-2 mt-1">
-                {report.session.company_name} · {report.session.assessment_type === 'overall'
-                  ? 'Full IAM assessment'
-                  : `${report.session.assessment_type} assessment`} · {completed}
-              </p>
+              <p className="text-lg text-ink mt-3">{report.session.company_name}</p>
+              <p className="text-sm text-ink-2 mt-1">{report.session.assessment_type_name}</p>
+              {contextLine && <p className="text-sm text-ink-3 mt-2">{contextLine}</p>}
+              <p className="text-xs text-ink-3 mt-4">Prepared: {completed}</p>
             </div>
-            <div className="text-center">
-              <div className="text-5xl font-bold text-ink">
-                {report.overall_score.toFixed(1)}
-                <span className="text-xl text-ink-3 font-normal"> / 5</span>
+            <div className="rounded-2xl border border-edge-accent/50 bg-card-hover px-8 py-6 text-center">
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-ink-2">
+                Overall maturity score
+              </p>
+              <div className="text-6xl font-bold text-ink mt-2">
+                {report.overall_score.toFixed(2)}
               </div>
-              <div className="text-sm text-ink-2 mt-1">{report.maturity_label} maturity</div>
+              <div className="text-sm text-ink-3 mt-1">/ 5.00</div>
               <span
-                className="inline-block mt-2 text-sm font-semibold px-4 py-1.5 rounded-full"
-                style={{ color: riskColor, border: `1.5px solid ${riskColor}` }}
+                className="inline-block mt-3 text-xs font-bold uppercase tracking-wide px-5 py-1.5 rounded-lg text-white"
+                style={{ backgroundColor: riskColor }}
               >
-                {report.risk} risk
+                {report.maturity_label}
               </span>
+            </div>
+          </div>
+
+          {/* Control-area breakdown mini bars */}
+          <div className="mt-8">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-ink-2 mb-3">
+              Control area breakdown
+            </p>
+            <div className="space-y-2.5">
+              {report.control_areas.map((a) => (
+                <div key={a.slug} className="flex items-center gap-3">
+                  <span className="w-56 flex-none text-xs text-ink-2 truncate">{a.short_name}</span>
+                  <div className="flex-1 h-2.5 rounded-full bg-navy border border-edge overflow-hidden">
+                    <div
+                      className="h-full rounded-full"
+                      style={{ width: `${(a.score / 5) * 100}%`, backgroundColor: scoreColor(a.score) }}
+                    />
+                  </div>
+                  <span className="w-8 flex-none text-right text-xs font-semibold" style={{ color: scoreColor(a.score) }}>
+                    {a.score.toFixed(1)}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -100,60 +154,263 @@ export default function Results() {
           )}
         </section>
 
-        {/* Radar chart */}
-        <section className="rounded-2xl border border-edge bg-card p-6">
-          <h2 className="text-lg font-semibold text-ink mb-1">Maturity by domain</h2>
-          <p className="text-sm text-ink-2 mb-4">
-            Your scores against the industry benchmark (dashed line).
-          </p>
-          <RadarChart domainScores={report.domain_scores} height={pdfMode ? 340 : 400} />
-        </section>
-
-        {/* Domain breakdown */}
-        <section className="rounded-2xl border border-edge bg-card p-6">
-          <h2 className="text-lg font-semibold text-ink mb-1">Domain score breakdown</h2>
-          <p className="text-sm text-ink-2 mb-5">
-            Bars are colour coded red / amber / green; the light tick marks the industry benchmark.
-          </p>
-          <div className="space-y-5">
-            {[...report.domain_scores]
-              .sort((a, b) => a.domain_score - b.domain_score)
-              .map((d) => (
-                <DomainScoreBar key={d.slug} domain={d} />
-              ))}
+        {/* ---- Executive Summary ---- */}
+        <Section title="Executive Summary">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="rounded-xl border border-edge bg-card-hover/40 p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-accent mb-2">Goals</p>
+              <Bullets items={es.goals} marker="•" />
+            </div>
+            <div className="rounded-xl border border-edge bg-card-hover/40 p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-accent mb-2">Key positives</p>
+              {es.key_positives.length ? (
+                <Bullets items={es.key_positives} marker="✓" />
+              ) : (
+                <p className="text-sm text-ink-3">No control areas reached a managed level yet.</p>
+              )}
+            </div>
           </div>
-        </section>
 
-        {/* Critical gaps */}
-        <section>
-          <h2 className="text-lg font-semibold text-ink mb-1">Your top 3 critical gaps</h2>
-          <p className="text-sm text-ink-2 mb-5">
-            The domains putting your organisation at greatest risk, and what that means in business terms.
+          <div className="mt-4 rounded-xl border border-edge-accent/50 bg-card-hover px-5 py-4 text-center">
+            <p className="text-ink font-semibold">{es.benchmark_statement}</p>
+          </div>
+
+          {es.key_observations.length > 0 && (
+            <div className="mt-4 grid md:grid-cols-2 gap-6">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-3 mb-2">Key observations</p>
+                <Bullets items={es.key_observations} marker="▸" markerClass="text-[color:var(--risk-high)]" />
+              </div>
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-3 mb-2">Business impact</p>
+                <Bullets items={es.business_impact} marker="▸" markerClass="text-[color:var(--risk-critical)]" />
+              </div>
+            </div>
+          )}
+
+          <p className="text-center text-sm font-semibold text-ink mt-6 mb-3">
+            How do we improve the maturity and gain automation?
           </p>
           <div className="grid md:grid-cols-3 gap-4">
-            {report.critical_gaps.map((gap, i) => (
-              <CriticalGapCard key={gap.slug} gap={gap} rank={i + 1} />
+            <div className="rounded-xl border border-edge bg-card-hover/40 p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-ink mb-2">Quick wins (0–3 months)</p>
+              <Bullets items={es.quick_wins} marker="•" />
+            </div>
+            <div className="rounded-xl border border-edge bg-card-hover/40 p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-ink mb-2">Strategic improvements</p>
+              <Bullets items={es.strategic_improvements} marker="•" />
+            </div>
+            <div className="rounded-xl border border-edge bg-card-hover/40 p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-ink mb-2">Business benefits</p>
+              <Bullets items={es.business_benefits} marker="•" />
+            </div>
+          </div>
+        </Section>
+
+        {/* ---- Scope & Current State ---- */}
+        <Section title="Scope & Current State">
+          <div className="grid lg:grid-cols-[260px_1fr] gap-6">
+            <div className="rounded-xl border border-edge bg-card-hover/40 p-5">
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-accent mb-4">
+                Engagement context
+              </p>
+              {[
+                ['Organisation', report.session.company_name],
+                ['Assessment type', report.session.assessment_type_name],
+                ['Industry', report.session.industry || '—'],
+                ['Region', report.session.region || '—'],
+                ['Sections assessed', report.engagement.sections_assessed],
+                ['Questions answered', report.engagement.questions_answered],
+                ['Text responses', report.engagement.text_responses],
+              ].map(([k, v]) => (
+                <div key={k} className="mb-3">
+                  <p className="text-[11px] text-ink-3">{k}</p>
+                  <p className="text-sm font-semibold text-ink">{v}</p>
+                </div>
+              ))}
+            </div>
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-ink-2 mb-3">
+                Control area maturity summary
+              </p>
+              <div className="grid sm:grid-cols-2 gap-3">
+                {report.control_areas.map((a) => (
+                  <DomainScoreBar
+                    key={a.slug}
+                    name={a.short_name}
+                    score={a.score}
+                    label={a.label}
+                    benchmark={a.benchmark}
+                  />
+                ))}
+              </div>
+              <div className="mt-4 rounded-xl bg-card-hover border border-edge px-5 py-3 flex items-center justify-between">
+                <span className="text-sm text-ink-2">Overall Maturity Index:</span>
+                <span className="text-lg font-bold text-ink">
+                  {report.overall_score.toFixed(2)} — {report.maturity_label}
+                </span>
+              </div>
+            </div>
+          </div>
+        </Section>
+
+        {/* ---- Maturity Footprint ---- */}
+        <Section
+          title="Maturity Footprint"
+          subtitle="Current vs proposed (12-month roadmap target) vs maximum, by control area."
+        >
+          <RadarChart footprint={report.footprint} height={pdfMode ? 360 : 420} />
+          <div className="mt-6 overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-ink-3 border-b border-edge">
+                  <th className="py-2 pr-4 font-medium">Control area</th>
+                  <th className="py-2 pr-4 font-medium">Rating</th>
+                  <th className="py-2 font-medium">Reason for current rating</th>
+                </tr>
+              </thead>
+              <tbody>
+                {report.control_areas.map((a) => (
+                  <tr key={a.slug} className="border-b border-edge last:border-0 align-top">
+                    <td className="py-2.5 pr-4 text-ink">{a.short_name}</td>
+                    <td className="py-2.5 pr-4">
+                      <span
+                        className="inline-block text-xs font-bold text-white rounded px-2.5 py-1"
+                        style={{ backgroundColor: scoreColor(a.score) }}
+                      >
+                        {a.score.toFixed(1)}
+                      </span>
+                    </td>
+                    <td className="py-2.5 text-ink-2">{a.reason}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Section>
+
+        {/* ---- Risk Distribution ---- */}
+        <Section
+          title="Risk Distribution & Domain Summary"
+          subtitle="Question-level risk across all assessed controls."
+        >
+          <div className="grid md:grid-cols-2 gap-6 items-start">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-ink-2 text-center mb-2">
+                Risk distribution (all controls)
+              </p>
+              <RiskDonut counts={report.risk_distribution.counts} />
+            </div>
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-ink-2 mb-3">
+                Control areas by risk tier
+              </p>
+              <div className="space-y-3">
+                {['Critical', 'High', 'Medium', 'Low'].map((tier) => {
+                  const areas = report.risk_distribution.tiers[tier];
+                  return (
+                    <div key={tier}>
+                      <div
+                        className="rounded-md px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-white"
+                        style={{ backgroundColor: RISK_COLORS[tier] }}
+                      >
+                        {tier} · {areas.length} {areas.length === 1 ? 'area' : 'areas'}
+                      </div>
+                      {areas.length ? (
+                        <div className="flex flex-wrap gap-1.5 mt-1.5">
+                          {areas.map((name) => (
+                            <span key={name} className="text-xs text-ink-2 border border-edge rounded-md px-2 py-1">
+                              {name}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-xs italic text-ink-3 mt-1.5 ml-1">None</p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </Section>
+
+        {/* ---- Observations & Remediations ---- */}
+        <Section title="Observations & Remediations" subtitle="Detailed findings with remediation steps and indicative durations.">
+          <ObservationsTable observations={report.observations} />
+        </Section>
+
+        {/* ---- Framework coverage ---- */}
+        <Section title="Framework Coverage" subtitle="How assessed controls map to recognised security frameworks.">
+          <CoverageBars coverage={report.coverage} />
+        </Section>
+
+        {/* ---- Improvement roadmap ---- */}
+        <Section title="Improvement Roadmap" subtitle="Prioritised P1 actions and strategic P2 follow-ons across a 12-month horizon.">
+          <RoadmapTimeline roadmap={report.roadmap} />
+        </Section>
+
+        {/* ---- Detailed remediation actions ---- */}
+        <Section title="Detailed Remediation Actions" subtitle="By timeline phase.">
+          <div className="grid md:grid-cols-3 gap-4">
+            {[
+              ['Quick Wins (0–30 days)', report.detailed_actions.quick_wins, 'var(--accent)'],
+              ['Medium-Term (30–90 days)', report.detailed_actions.medium_term, 'var(--level-3)'],
+              ['Strategic (6–12 months)', report.detailed_actions.strategic, 'var(--text-secondary)'],
+            ].map(([title, items, color]) => (
+              <div key={title} className="rounded-xl border border-edge bg-card-hover/40 overflow-hidden">
+                <p
+                  className="text-xs font-bold uppercase tracking-wide text-white px-4 py-2.5"
+                  style={{ backgroundColor: color }}
+                >
+                  {title}
+                </p>
+                <ul className="p-4 space-y-3">
+                  {items.map((it, i) => (
+                    <li key={i} className="text-sm text-ink-2 leading-relaxed">
+                      <span className="text-ink font-medium">{it.area}: </span>
+                      {it.action}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
           </div>
-        </section>
+        </Section>
 
-        {/* 90-day roadmap */}
-        <section className="rounded-2xl border border-edge bg-card p-6">
-          <h2 className="text-lg font-semibold text-ink mb-1">Your 90-day remediation roadmap</h2>
-          <p className="text-sm text-ink-2 mb-6">
-            A phased plan focused on your three biggest gaps.
-          </p>
-          <RoadmapTimeline roadmap={report.roadmap} />
-        </section>
+        {/* ---- Current environment understanding ---- */}
+        {report.environment.length > 0 && (
+          <Section
+            title="Current Environment Understanding"
+            subtitle="Information responses captured during the assessment, grouped by control area."
+          >
+            <div className="space-y-5">
+              {report.environment.map((grp) => (
+                <div key={grp.slug}>
+                  <p className="text-sm font-semibold text-accent mb-2">{grp.area}</p>
+                  <div className="space-y-3">
+                    {grp.items.map((it, i) => (
+                      <div key={i} className="rounded-lg border border-edge bg-card-hover/40 px-4 py-3">
+                        <p className="text-xs text-ink-3 mb-1">
+                          {it.sub_category ? `${it.sub_category} · ` : ''}{it.question}
+                        </p>
+                        <p className="text-sm text-ink whitespace-pre-line">{it.answer}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Section>
+        )}
 
-        {/* Closing CTA */}
+        {/* ---- Closing CTA ---- */}
         <section className="rounded-2xl border border-edge-accent bg-card p-8 text-center">
-          <h2 className="text-xl font-bold text-ink">
-            Ready to close these gaps?
-          </h2>
+          <h2 className="text-xl font-bold text-ink">Ready to close these gaps?</h2>
           <p className="text-ink-2 mt-2 max-w-xl mx-auto">
-            vSecure's AI-native identity security platform maps directly to the gaps
-            in this report. Talk to us about a tailored remediation plan.
+            vSecure's AI-native identity security platform maps directly to the gaps in
+            this report. Talk to us about a tailored remediation plan — this roadmap
+            targets a {report.target_score.toFixed(1)} '{report.maturity_label === 'Optimised' ? 'Optimised' : 'Managed'}' posture.
           </p>
           {!pdfMode ? (
             <a
@@ -168,7 +425,8 @@ export default function Results() {
         </section>
 
         <p className="text-center text-xs text-ink-3 pb-6">
-          Assessment based on NIST 800-53, CIS Controls and NIST CSF 2.0 · Generated by vSecure
+          {report.session.company_name} · {report.session.assessment_type_name} ·
+          Based on NIST 800-53, CIS Controls and NIST CSF 2.0 · Generated by vSecure
         </p>
       </main>
     </div>

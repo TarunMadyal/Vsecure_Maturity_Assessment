@@ -29,10 +29,10 @@ export default function Landing() {
           </h1>
           <p className="mt-6 text-lg text-ink-2 leading-relaxed">
             Evaluate your organisation's identity and access management practices
-            across {meta ? meta.types.length - 1 : 'four'} specialist domains — from
-            identity governance and privileged access to customer identity. Get
-            scored against industry benchmarks and receive a personalised 90-day
-            remediation roadmap.
+            across {meta ? meta.types.length - 1 : 'four'} specialist areas — IGA,
+            PAM, WAM and CIAM. Rate your maturity per control area, capture your
+            current environment, and receive a board-ready report with a
+            prioritised 12-month improvement roadmap.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -61,9 +61,10 @@ export default function Landing() {
           </h2>
           <p className="text-ink-2 text-center mb-8 max-w-2xl mx-auto">
             {full
-              ? `${full.question_count} questions across ${full.domains.length} IAM domains,`
-              : 'Questions across every IAM domain,'}{' '}
-            each rated on a five-level maturity scale from Initial to Optimising.
+              ? `${full.question_count} questions across ${full.domains.length} control areas,`
+              : 'Questions across every IAM control area,'}{' '}
+            each maturity question rated on a five-level scale from Initial to
+            Optimised, plus current-environment discovery.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             {(full?.domains || []).map((d) => (
@@ -83,9 +84,9 @@ export default function Landing() {
         {/* How it works */}
         <section className="pb-24 grid md:grid-cols-3 gap-4">
           {[
-            ['Answer honestly', 'Pick the maturity level (1–5) that best describes your current reality for each question — or N/A if it doesn\'t apply.'],
-            ['See your scores', 'Weighted scores per domain, benchmarked against industry averages, with your top three critical gaps explained in business terms.'],
-            ['Act on the roadmap', 'A personalised 90-day remediation plan mapped to vSecure capabilities, plus a board-ready PDF report.'],
+            ['Answer honestly', 'Rate each maturity question 1–5 against your current reality — or N/A if it doesn\'t apply — and describe your environment in the information questions.'],
+            ['See your scores', 'Scores per control area with maturity ratings, risk tiers, framework coverage and observations explained in business terms.'],
+            ['Act on the roadmap', 'A prioritised 12-month improvement roadmap with detailed remediation actions, plus a board-ready PDF report.'],
           ].map(([title, body], i) => (
             <div key={title} className="rounded-2xl border border-edge bg-card p-6">
               <span className="w-8 h-8 rounded-full bg-accent text-white font-bold flex items-center justify-center mb-4">

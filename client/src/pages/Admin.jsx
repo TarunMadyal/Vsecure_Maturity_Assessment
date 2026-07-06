@@ -217,15 +217,21 @@ export default function Admin() {
                 <div className="mt-5 rounded-xl border border-edge bg-card-hover p-4 flex items-center justify-between">
                   <span className="text-ink-2 text-sm">Overall maturity</span>
                   <span className="text-2xl font-bold text-ink">
-                    {detail.overall_score.toFixed(1)}<span className="text-sm text-ink-3 font-normal"> / 5</span>
+                    {detail.overall_score.toFixed(2)}<span className="text-sm text-ink-3 font-normal"> / 5</span>
                     <span className="ml-3 text-sm font-semibold" style={{ color: RISK_COLORS[detail.risk] }}>
-                      {detail.risk} risk
+                      {detail.maturity_label}
                     </span>
                   </span>
                 </div>
-                <div className="mt-6 space-y-4">
-                  {detail.domain_scores.map((d) => (
-                    <DomainScoreBar key={d.slug} domain={d} />
+                <div className="mt-6 grid gap-3">
+                  {detail.control_areas.map((a) => (
+                    <DomainScoreBar
+                      key={a.slug}
+                      name={a.short_name}
+                      score={a.score}
+                      label={a.label}
+                      benchmark={a.benchmark}
+                    />
                   ))}
                 </div>
                 <div className="mt-6">
@@ -233,7 +239,8 @@ export default function Admin() {
                   <ul className="space-y-1.5 text-sm text-ink-2">
                     {detail.critical_gaps.map((g, i) => (
                       <li key={g.slug}>
-                        {i + 1}. {g.name} — {g.domain_score.toFixed(1)}/5
+                        {i + 1}. {g.name} — {g.score.toFixed(1)}/5 ·{' '}
+                        <span style={{ color: RISK_COLORS[g.risk] }}>{g.risk} risk</span>
                       </li>
                     ))}
                   </ul>

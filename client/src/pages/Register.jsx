@@ -9,6 +9,10 @@ const INDUSTRIES = [
   'Manufacturing', 'Government & Public Sector', 'Education', 'Energy & Utilities',
   'Telecommunications', 'Professional Services', 'Media & Entertainment', 'Other',
 ];
+const REGIONS = [
+  'UK', 'Europe', 'North America', 'Middle East', 'Asia Pacific', 'Africa',
+  'Latin America', 'Global',
+];
 const TYPE_LABELS = {
   overall: 'Full IAM Assessment',
   IGA: 'Identity Governance (IGA)',
@@ -24,7 +28,7 @@ export default function Register() {
 
   const [form, setForm] = useState({
     contact_name: '', contact_email: '', company_name: '',
-    contact_role: '', company_size: '', industry: '',
+    contact_role: '', company_size: '', industry: '', region: '',
   });
   const [error, setError] = useState(null);
   const [busy, setBusy] = useState(false);
@@ -98,6 +102,13 @@ export default function Register() {
                 {INDUSTRIES.map((i) => <option key={i} value={i}>{i}</option>)}
               </select>
             </div>
+          </div>
+          <div>
+            <label className="block text-sm text-ink-2 mb-1.5" htmlFor="region">Region</label>
+            <select id="region" className={field} value={form.region} onChange={set('region')}>
+              <option value="">Select…</option>
+              {REGIONS.map((r) => <option key={r} value={r}>{r}</option>)}
+            </select>
           </div>
 
           {error && <p className="text-sm text-[color:var(--risk-critical)]">{error}</p>}

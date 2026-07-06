@@ -17,10 +17,11 @@ export const api = {
   createSession: (data) =>
     request('/api/sessions', { method: 'POST', body: JSON.stringify(data) }),
   getSession: (token) => request(`/api/sessions/${token}`),
-  saveAnswer: (token, questionId, level) =>
+  // payload: { level } for maturity questions, { text } for information ones.
+  saveAnswer: (token, questionId, payload) =>
     request('/api/answers', {
       method: 'POST',
-      body: JSON.stringify({ token, question_id: questionId, level }),
+      body: JSON.stringify({ token, question_id: questionId, ...payload }),
     }),
   submit: (token) => request(`/api/sessions/${token}/submit`, { method: 'POST' }),
   results: (token) => request(`/api/results/${token}`),

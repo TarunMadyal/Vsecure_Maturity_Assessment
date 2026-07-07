@@ -189,7 +189,7 @@ export default function Assessment() {
         <ProgressBar answered={maturityAnswered} total={maturityQuestions.length} />
       </div>
 
-      <main id="main" className="max-w-6xl mx-auto px-4 py-8 flex gap-6 items-start">
+      <main id="main" className="max-w-6xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-6 lg:items-start">
         <ControlAreaNav
           areas={data.control_areas}
           answers={answers}

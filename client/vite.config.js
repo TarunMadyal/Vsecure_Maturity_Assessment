@@ -8,5 +8,8 @@ export default defineConfig({
     proxy: {
       '/api': 'http://localhost:3001',
     },
+    // Allow any ngrok tunnel hostname to reach the dev server (the free
+    // tier assigns a new random subdomain on each restart).
+    allowedHosts: ['.ngrok-free.app', '.ngrok-free.dev', '.ngrok.io'],
   },
 });

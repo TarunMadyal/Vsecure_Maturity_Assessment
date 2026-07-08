@@ -8,6 +8,29 @@ export const AREA_NAMES = {
   CIAM: 'Customer Identity & Access Management',
 };
 
+// Subtle per-domain accent so each IAM area reads as its own colour family
+// without shouting. `accent` drives icons/text/borders, `soft` is a low-alpha
+// wash for backgrounds, `ring` a slightly stronger border tint. All chosen to
+// sit calmly on the near-black navy background.
+export const AREA_THEMES = {
+  IGA:  { accent: '#5b8bff', soft: 'rgba(91,139,255,0.10)',  ring: 'rgba(91,139,255,0.40)'  },
+  PAM:  { accent: '#a78bfa', soft: 'rgba(167,139,250,0.10)', ring: 'rgba(167,139,250,0.40)' },
+  WAM:  { accent: '#2dd4bf', soft: 'rgba(45,212,191,0.10)',  ring: 'rgba(45,212,191,0.40)'  },
+  CIAM: { accent: '#f2a65a', soft: 'rgba(242,166,90,0.10)',  ring: 'rgba(242,166,90,0.40)'  },
+};
+
+const DEFAULT_AREA_THEME = {
+  accent: '#3b6bff',
+  soft: 'rgba(59,107,255,0.10)',
+  ring: 'rgba(59,107,255,0.40)',
+};
+
+// Theme for a control-area type; falls back to the brand blue for anything
+// outside the four known IAM areas (e.g. single-domain custom sets).
+export function areaTheme(type) {
+  return AREA_THEMES[type] || DEFAULT_AREA_THEME;
+}
+
 // Groups a list of items carrying an `area_type` field into ordered
 // [{ type, name, items }] buckets, preserving item order.
 export function groupByAreaType(items, getType = (x) => x.area_type) {
@@ -42,6 +65,17 @@ export const LEVEL_NAMES = {
   3: 'Defined',
   4: 'Managed',
   5: 'Optimised',
+};
+
+// One-line plain-English meaning per level, shown as an always-visible
+// reference so raters never have to guess what a level means.
+export const LEVEL_MEANINGS = {
+  1: 'Ad-hoc and inconsistent - no formal process',
+  2: 'Some processes exist but are not standardised',
+  3: 'Documented, standardised and applied across teams',
+  4: 'Measured, monitored and actively controlled',
+  5: 'Continuously improved and largely automated',
+  0: "This control doesn't apply to your organisation",
 };
 
 export const RISK_COLORS = {

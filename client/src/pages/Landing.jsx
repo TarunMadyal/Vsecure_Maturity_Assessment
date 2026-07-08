@@ -72,22 +72,41 @@ export default function Landing() {
             each maturity question rated on a five-level scale from Initial to
             Optimised, plus current-environment discovery.
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-            {loading &&
-              Array.from({ length: 10 }).map((_, i) => (
+          {loading && (
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+              {Array.from({ length: 10 }).map((_, i) => (
                 <div key={i} className="skeleton h-[86px]" aria-hidden="true" />
               ))}
-            {(full?.domains || []).map((d) => (
-              <div
-                key={d.slug}
-                className="card-lift rounded-xl border border-edge bg-card px-4 py-4 flex flex-col items-center gap-2 text-center"
-              >
-                <span className="text-accent">
-                  <Icon name={d.icon} size={22} />
-                </span>
-                <span className="text-sm text-ink-2">{d.name}</span>
-              </div>
-            ))}
+            </div>
+          )}
+          {/* Control areas clubbed per IAM domain, per the vSecure frameworks */}
+          <div className="space-y-8">
+            {(meta?.types || [])
+              .filter((t) => t.type !== 'overall')
+              .map((t) => (
+                <div key={t.type}>
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="flex-none text-[11px] font-bold uppercase tracking-wider text-white btn-gradient rounded-md px-2.5 py-1">
+                      {t.type}
+                    </span>
+                    <h3 className="text-sm font-semibold text-ink">{t.name}</h3>
+                    <span className="flex-1 h-px bg-[color:var(--border)]" aria-hidden="true" />
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {t.domains.map((d) => (
+                      <div
+                        key={d.slug}
+                        className="card-lift rounded-xl border border-edge bg-card px-4 py-4 flex flex-col items-center gap-2 text-center"
+                      >
+                        <span className="text-accent">
+                          <Icon name={d.icon} size={22} />
+                        </span>
+                        <span className="text-sm text-ink-2">{d.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
           </div>
         </section>
 

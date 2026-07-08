@@ -204,7 +204,14 @@ export default function Assessment() {
               <Icon name={area.icon} size={20} />
             </span>
             <div className="min-w-0">
-              <h1 className="text-lg font-semibold text-ink truncate">{area.name}</h1>
+              <h1 className="text-lg font-semibold text-ink truncate flex items-center gap-2">
+                <span className="truncate">{area.name}</span>
+                {data.session.assessment_type === 'overall' && (
+                  <span className="flex-none text-[10px] font-bold uppercase tracking-wider text-white btn-gradient rounded-md px-2 py-0.5">
+                    {area.area_type}
+                  </span>
+                )}
+              </h1>
               <p className="text-sm text-ink-2">
                 {areaAnswered}/{areaMaturity.length} maturity questions answered
                 {area.description && <span className="hidden sm:inline text-ink-3"> · {area.description}</span>}

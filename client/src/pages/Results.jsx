@@ -9,7 +9,7 @@ import RiskDonut from '../components/RiskDonut';
 import CoverageBars from '../components/CoverageBars';
 import ObservationsTable from '../components/ObservationsTable';
 import RoadmapTimeline from '../components/RoadmapTimeline';
-import { RISK_COLORS, scoreColor } from '../lib/theme';
+import { RISK_COLORS, scoreColor, groupByAreaType } from '../lib/theme';
 import { api } from '../lib/api';
 
 const Section = ({ title, subtitle, children }) => (
@@ -96,6 +96,10 @@ export default function Results() {
 
   const riskColor = RISK_COLORS[report.risk];
   const es = report.executive_summary;
+  // Control areas clubbed under their IAM domain (headings shown only when
+  // the assessment spans more than one domain).
+  const areaGroups = groupByAreaType(report.control_areas);
+  const multiDomain = areaGroups.length > 1;
   const completed = report.session.completed_at
     ? new Date(report.session.completed_at).toLocaleDateString('en-GB', {
         day: 'numeric', month: 'long', year: 'numeric',
@@ -149,19 +153,30 @@ export default function Results() {
             <p className="text-[11px] font-semibold uppercase tracking-widest text-ink-2 mb-3">
               Control area breakdown
             </p>
-            <div className="space-y-2.5">
-              {report.control_areas.map((a) => (
-                <div key={a.slug} className="flex items-center gap-3">
-                  <span className="w-56 flex-none text-xs text-ink-2 truncate">{a.short_name}</span>
-                  <div className="flex-1 h-2.5 rounded-full bg-navy border border-edge overflow-hidden">
-                    <div
-                      className="h-full rounded-full"
-                      style={{ width: `${(a.score / 5) * 100}%`, backgroundColor: scoreColor(a.score) }}
-                    />
+            <div className="space-y-4">
+              {areaGroups.map((group) => (
+                <div key={group.type}>
+                  {multiDomain && (
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-accent mb-2">
+                      {group.type} · <span className="font-medium normal-case text-ink-3">{group.name}</span>
+                    </p>
+                  )}
+                  <div className="space-y-2.5">
+                    {group.items.map((a) => (
+                      <div key={a.slug} className="flex items-center gap-3">
+                        <span className="w-40 sm:w-56 flex-none text-xs text-ink-2 truncate">{a.short_name}</span>
+                        <div className="flex-1 h-2.5 rounded-full bg-navy border border-edge overflow-hidden">
+                          <div
+                            className="h-full rounded-full"
+                            style={{ width: `${(a.score / 5) * 100}%`, backgroundColor: scoreColor(a.score) }}
+                          />
+                        </div>
+                        <span className="w-8 flex-none text-right text-xs font-semibold" style={{ color: scoreColor(a.score) }}>
+                          {a.score.toFixed(1)}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                  <span className="w-8 flex-none text-right text-xs font-semibold" style={{ color: scoreColor(a.score) }}>
-                    {a.score.toFixed(1)}
-                  </span>
                 </div>
               ))}
             </div>
@@ -277,15 +292,26 @@ export default function Results() {
               <p className="text-[11px] font-semibold uppercase tracking-widest text-ink-2 mb-3">
                 Control area maturity summary
               </p>
-              <div className="grid sm:grid-cols-2 gap-3">
-                {report.control_areas.map((a) => (
-                  <DomainScoreBar
-                    key={a.slug}
-                    name={a.short_name}
-                    score={a.score}
-                    label={a.label}
-                    benchmark={a.benchmark}
-                  />
+              <div className="space-y-5">
+                {areaGroups.map((group) => (
+                  <div key={group.type}>
+                    {multiDomain && (
+                      <p className="text-[11px] font-bold uppercase tracking-wider text-accent mb-2">
+                        {group.type} · <span className="font-medium normal-case text-ink-3">{group.name}</span>
+                      </p>
+                    )}
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      {group.items.map((a) => (
+                        <DomainScoreBar
+                          key={a.slug}
+                          name={a.short_name}
+                          score={a.score}
+                          label={a.label}
+                          benchmark={a.benchmark}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
               <div className="mt-4 rounded-xl bg-card-hover border border-edge px-5 py-3 flex items-center justify-between">

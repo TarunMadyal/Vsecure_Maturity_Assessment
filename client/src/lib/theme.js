@@ -1,5 +1,30 @@
 // Presentation constants only - no assessment content lives here.
 
+// Display names for the four IAM areas that group the control areas.
+export const AREA_NAMES = {
+  IGA: 'Identity Governance & Administration',
+  PAM: 'Privileged Access Management',
+  WAM: 'Web Access Management',
+  CIAM: 'Customer Identity & Access Management',
+};
+
+// Groups a list of items carrying an `area_type` field into ordered
+// [{ type, name, items }] buckets, preserving item order.
+export function groupByAreaType(items, getType = (x) => x.area_type) {
+  const groups = [];
+  const byType = new Map();
+  for (const item of items) {
+    const type = getType(item);
+    if (!byType.has(type)) {
+      const g = { type, name: AREA_NAMES[type] || type, items: [] };
+      byType.set(type, g);
+      groups.push(g);
+    }
+    byType.get(type).items.push(item);
+  }
+  return groups;
+}
+
 export const LEVEL_COLORS = {
   0: '#888780',
   1: '#E24B4A',

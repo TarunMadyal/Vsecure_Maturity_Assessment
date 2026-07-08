@@ -19,6 +19,15 @@ export const AREA_THEMES = {
   CIAM: { accent: '#f2a65a', soft: 'rgba(242,166,90,0.10)',  ring: 'rgba(242,166,90,0.40)'  },
 };
 
+// One distinctive glyph per IAM domain, used on the assessment-picker so each
+// domain reads as its own thing (rather than repeating a control area's icon).
+export const DOMAIN_ICONS = {
+  IGA: 'users',
+  PAM: 'key',
+  WAM: 'globe',
+  CIAM: 'user-check',
+};
+
 const DEFAULT_AREA_THEME = {
   accent: '#3b6bff',
   soft: 'rgba(59,107,255,0.10)',

@@ -182,6 +182,26 @@ h1, h2, h3, h4 {
   animation: check-pop 0.3s ease-out both;
 }
 
+/* IAM coverage diagram: spokes draw in, then nodes pop. */
+.diagram-line {
+  stroke-dasharray: 320;
+  stroke-dashoffset: 320;
+  animation: draw-line 0.7s ease-out forwards;
+}
+@keyframes draw-line {
+  to { stroke-dashoffset: 0; }
+}
+.diagram-node {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: node-pop 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes node-pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  70% { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
 /* Respect users who prefer reduced motion. */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

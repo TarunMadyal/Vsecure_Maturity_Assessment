@@ -52,9 +52,13 @@ export default function Landing() {
               to="/start"
               className="rounded-xl border border-edge-accent text-accent font-semibold px-8 py-4 hover:bg-card-hover transition-colors"
             >
-              Choose a specific domain
+              Assess one domain instead
             </Link>
           </div>
+          <p className="mt-4 text-sm text-ink-3">
+            Short on time? Focus on a single domain -{' '}
+            <span className="text-ink-2">IGA, PAM, WAM or CIAM</span>.
+          </p>
           <p className="mt-8 text-sm text-ink-3">
             Based on NIST 800-53, CIS Controls, and CSF 2.0 frameworks · No credit
             card required · Results in minutes

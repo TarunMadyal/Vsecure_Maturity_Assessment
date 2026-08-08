@@ -18,7 +18,7 @@ const TYPE_LABELS = {
   overall: 'Full IAM Assessment',
   IGA: 'Identity Governance (IGA)',
   PAM: 'Privileged Access (PAM)',
-  WAM: 'Web Access Management (WAM)',
+  WAM: 'Workforce Access Management (WAM)',
   CIAM: 'Customer Identity (CIAM)',
 };
 

@@ -4,7 +4,7 @@
 export const AREA_NAMES = {
   IGA: 'Identity Governance & Administration',
   PAM: 'Privileged Access Management',
-  WAM: 'Web Access Management',
+  WAM: 'Workforce Access Management',
   CIAM: 'Customer Identity & Access Management',
 };
 

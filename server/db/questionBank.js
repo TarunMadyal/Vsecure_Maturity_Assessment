@@ -742,7 +742,7 @@ const AREAS = {
 
   /* ================================ WAM ================================ */
   WAM: {
-    name: 'Web Access Management',
+    name: 'Workforce Access Management',
     controlAreas: [
       {
         name: 'Architecture, Tools and Design',

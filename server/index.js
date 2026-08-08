@@ -45,7 +45,7 @@ app.get('/api/meta', async (req, res, next) => {
     const TYPE_INFO = {
       IGA: { name: 'Identity Governance & Administration', tagline: 'Lifecycle automation, provisioning, certification and reporting' },
       PAM: { name: 'Privileged Access Management', tagline: 'Vaulting, least privilege, session monitoring and machine identities' },
-      WAM: { name: 'Web Access Management', tagline: 'SSO coverage, MFA, sessions, governance and compliance evidence' },
+      WAM: { name: 'Workforce Access Management', tagline: 'SSO coverage, MFA, sessions, governance and compliance evidence' },
       CIAM: { name: 'Customer Identity', tagline: 'Customer login, consent, fraud protection and resilience' },
     };
 

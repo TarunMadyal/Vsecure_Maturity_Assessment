@@ -577,7 +577,7 @@ const TYPE_NAMES = {
   overall: 'Full IAM',
   IGA: 'Identity Governance & Administration (IGA)',
   PAM: 'Privileged Access Management (PAM)',
-  WAM: 'Web Access Management (WAM)',
+  WAM: 'Workforce Access Management (WAM)',
   CIAM: 'Customer Identity & Access Management (CIAM)',
 };
 
